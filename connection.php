@@ -1,0 +1,17 @@
+
+<?php 
+    $host = "localhost";
+    $username = "root";
+    $pass = "123pass";
+    $dbname = "DrugDisp";
+
+
+    $con = mysqli_connect($host, $username, $pass, $dbname);
+
+    if($con == true) {
+        echo "";
+    }else {
+        die("failed to connect");
+    }
+
+?>
