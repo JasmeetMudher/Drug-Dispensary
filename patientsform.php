@@ -10,8 +10,9 @@ if(isset($_POST["submit"])){
     $Email = $_POST["Email"];
     $Gender = $_POST["Gender"];
 
-    $query = "INSERT INTO patients VALUES('$FirstName','$LastName',$SSN,'$DOB','$Address','$Phone','$Email','$Gender')";
-    if(mysqli_query($conn,$sql)){
+    $query = "INSERT INTO patients(FirstName,LastName,SSN,DOB,Address,Phone,Email,Gender) 
+                VALUES('$FirstName','$LastName',$SSN,'$DOB','$Address','$Phone','$Email','$Gender')";
+    if(mysqli_query($con,$sql)){
         echo "New Record added";
     }else{
         echo "Error: " . $sql . "<br>" . mysqli_error($conn);
