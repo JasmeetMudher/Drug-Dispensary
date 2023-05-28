@@ -1,20 +1,23 @@
 
 <?php 
-    $host = "localhost";
-    $username = "root";
-    $pass = "123pass";
-    $dbname = "drugdispensary";
 
+    function getDbConnection(){
 
-    $con = mysqli_connect($host, $username, $pass, $dbname);
+        $host = "localhost";
+        $username = "root";
+        $pass = "123pass";
+        $dbname = "drugdispensary";
+    
 
-    if($con == true) {
-        echo "";
-    }else {
-        die("failed to connect");
+        $conn = mysqli_connect($host, $username, $pass, $dbname);
+
+        if($conn == true) {
+            return $conn;
+        }else {
+            die("failed to connect");
+        }
     }
 
 /* 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 */
 
 ?>
-
