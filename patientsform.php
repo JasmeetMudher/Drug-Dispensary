@@ -12,7 +12,7 @@ if(isset($_POST["submit"])){
 
     $query = "INSERT INTO patients(FirstName,LastName,SSN,DOB,Address,Phone,Email,Gender) 
                 VALUES('$FirstName','$LastName',$SSN,'$DOB','$Address','$Phone','$Email','$Gender')";
-    if(mysqli_query($con,$sql)){
+    if(mysqli_query($conn,$sql)){
         echo "New Record added";
     }else{
         echo "Error: " . $sql . "<br>" . mysqli_error($conn);
