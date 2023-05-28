@@ -2,7 +2,7 @@
 <?php 
     $host = "localhost";
     $username = "root";
-    $pass = "123pass";
+    $pass = "";
     $dbname = "drugdispensary";
 
 
