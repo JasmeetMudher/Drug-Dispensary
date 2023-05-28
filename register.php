@@ -4,6 +4,8 @@ include 'crud.php';
 $msg = '';
 $suc = '';
 
+
+
 if(isset($_POST["btnsubmit"])){
 
     $patient_data = array(
@@ -11,10 +13,11 @@ if(isset($_POST["btnsubmit"])){
         'ssn' => $_POST["SSN"],
         'Fname' => $_POST["fname"],
         'Lname' => $_POST["lname"],
-        'age' => $_POST["age"],
-        'dob' => $_POST["dob"],
+        'phone' => $_POST["phone"],
+        'dob' => date('y-m-d',strtotime($_POST["dob"])),
         'email' => $_POST["email"],
-        'password' => $_POST["password"]
+        'password' => $_POST["password"],
+        'address' => $_POST["address"]
 
     );
 
@@ -22,7 +25,7 @@ if(isset($_POST["btnsubmit"])){
 
     if($crud->create("patients", $patient_data)){
         $msg = "<div class='btn btn-success'>records inserted successfully</div>";
-        header("location: index.php");
+        header("location: dashboard.php");
     }else{
         die("Error in creating patient");
     }
@@ -95,31 +98,31 @@ if(isset($_POST["btnsubmit"])){
                     <div class="col-12">
                       <label class="form-label">First Name</label>
                       <input type="text" name="fname" class="form-control"  id= "yourName" required>
-                      <div class="invalid-feedback">Please enter a valid Email adddress!</div>
                     </div>
 
                     <div class="col-12">
                       <label class="form-label">Last Name</label>
                       <input type="text" name="lname" class="form-control"  required>
-                      <div class="invalid-feedback">Please enter a valid Email adddress!</div>
-                    </div>
-
-                    <div class="col-12">
-                      <label class="form-label">Age</label>
-                      <input type="text" name="age" class="form-control"  required>
-                      <div class="invalid-feedback">Please enter a valid Email adddress!</div>
                     </div>
 
                     <div class="col-12">
                       <label class="form-label">DOB</label>
-                      <input type="text" name="dob" class="form-control" required>
-                      <div class="invalid-feedback">Please enter a valid Email adddress!</div>
+                      <input type="date" name="dob" class="form-control"  required>
+                    </div>
+
+                    <div class="col-12">
+                      <label class="form-label">Phone</label>
+                      <input type="text" name="phone" class="form-control" required>
                     </div>
 
                     <div class="col-12">
                       <label class="form-label">Email </label>
                       <input type="text" name="email" class="form-control" id="yourEmail" required>
-                      <div class="invalid-feedback">Please enter a valid Email adddress!</div>
+                    </div>
+
+                    <div class="col-12">
+                      <label class="form-label">Address </label>
+                      <input type="text" name="address" class="form-control" id="yourEmail" required>
                     </div>
 
                     <div class="col-12">
@@ -128,13 +131,6 @@ if(isset($_POST["btnsubmit"])){
                       <div class="invalid-feedback">Please enter your password!</div>
                     </div>
 
-                    <div class="col-12">
-                      <div class="form-check">
-                        <input class="form-check-input" name="terms" type="checkbox" value="" id="acceptTerms" required>
-                        <label class="form-check-label" for="acceptTerms">I agree and accept the <a href="#">terms and conditions</a></label>
-                        <div class="invalid-feedback">You must agree before submitting.</div>
-                      </div>
-                    </div>
                     <div class="col-12">
                       <button class="btn btn-primary w-100" type="submit" name="btnsubmit">Create Account</button>
                     </div>
@@ -145,15 +141,6 @@ if(isset($_POST["btnsubmit"])){
 
                 </div>
               </div>
-
-              <div class="credits">
-                <!-- All the links in the footer should remain intact. -->
-                <!-- You can delete the links only if you purchased the pro version. -->
-                <!-- Licensing information: https://bootstrapmade.com/license/ -->
-                <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
-                Designed by <a href="#">Hazzlehood</a>
-              </div>
-
             </div>
           </div>
         </div>
@@ -164,19 +151,6 @@ if(isset($_POST["btnsubmit"])){
   </main><!-- End #main -->
 
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
-
-  <!-- Vendor JS Files -->
-  <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
-  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="assets/vendor/chart.js/chart.min.js"></script>
-  <script src="assets/vendor/echarts/echarts.min.js"></script>
-  <script src="assets/vendor/quill/quill.min.js"></script>
-  <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
-  <script src="assets/vendor/tinymce/tinymce.min.js"></script>
-  <script src="assets/vendor/php-email-form/validate.js"></script>
-
-  <!-- Template Main JS File -->
-  <script src="assets/js/main.js"></script>
 
 </body>
 
