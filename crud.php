@@ -19,7 +19,8 @@ class CRUD
         $sql = "INSERT INTO $table ($columns) VALUES ($values)";
 
         if ($this->conn->query($sql) === TRUE) {
-            return $this->conn->insert_id;
+            //return $this->conn->insert_id;
+            return true;
         } else {
             return false;
         }
