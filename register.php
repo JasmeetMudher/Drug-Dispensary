@@ -1,4 +1,7 @@
 <?php
+
+session_start();
+
 include 'connection.php';
 include 'crud.php';
 $msg = '';
@@ -23,7 +26,7 @@ if(isset($_POST["btnsubmit"])){
 
     $crud = new CRUD("localhost","root","123pass","drugdispensary");
 
-    if($crud->create("patients", $patient_data)){
+    if($crud->create("doctors", $patient_data)){
         $msg = "<div class='btn btn-success'>records inserted successfully</div>";
         header("location: dashboard.php");
     }else{
@@ -43,7 +46,7 @@ if(isset($_POST["btnsubmit"])){
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Pages / Register - NiceAdmin Bootstrap Template</title>
+  <title>Register</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 

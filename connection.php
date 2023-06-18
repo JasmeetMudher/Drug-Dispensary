@@ -6,9 +6,9 @@
     $dbname = "drugdispensary";
 
 
-    $conn = mysqli_connect($host, $username, $pass, $dbname);
+    $con = mysqli_connect($host, $username, $pass, $dbname);
 
-    if($conn == true) {
+    if($con == true) {
         echo " ";
     }else {
         die("failed to connect");
