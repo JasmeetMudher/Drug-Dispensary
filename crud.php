@@ -73,16 +73,12 @@ class CRUD
         }
     }
 
-    /*public function getUserBySSN($username,$password)
+    public function getUserBySSN($username)
     {
-        //$username = $this->conn->real_escape_string($username);
+        $username = $this->conn->real_escape_string($username);
         $sql = "SELECT * FROM patients WHERE ssn= '$username' LIMIT 1";
         
         $result = $this->conn->query($sql);
-        $userpas = $result->
-        if($result->num_rows > 0){
-
-        }
 
         if ($result->num_rows > 0) {
             return $result->fetch_assoc();
@@ -91,7 +87,7 @@ class CRUD
         } else {
             return false;
         }
-    }*/
+    }
 
     public function __destruct()
     {
