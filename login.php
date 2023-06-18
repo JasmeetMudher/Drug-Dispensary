@@ -1,27 +1,31 @@
 <?php
 session_start();
-//include 'connect.php';
-include 'crud.php';
-$msg = '';
+include 'connect.php';
+$msg = $result['password'];
 
-$crud = new CRUD("localhost","root","123pass","drugdispensary");
 
-if (isset($_POST["btnlogin"])) {
-  $password = ($_POST["password"]);
-  $userssn = $_POST["ssn"];
+if(isset($_POST["btnlogin"])){
+$pass = $_POST["password"];
+$username = $_POST["username"];
 
-  //$user = $crud->getUserBySSN($userssn);
+$sql = mysqli_query($conn, "select * from registration where username = '$username'");
+$count = mysqli_num_rows($sql);
+$result = mysqli_fetch_array($sql);
+$password = $result['password'];
 
-  if ($user && password_verify($password, $user['password'])) {
-    // Authentication successful
-    $_SESSION['user_id'] = $user['ssn'];
-    $_SESSION['username'] = $user['username'];
-    echo "Login successful. Welcome, " . $user['username'];
-} else {
-    // Authentication failed
-    echo "Invalid username or password.";
+if($count > 0){
+  if($pass == $password){
+    $_SESSION['user']=$username;
+    header("location: dashboard.php");
+  }
+  else{
+    $msg="<div class='btn btn-danger'>Password is wrong</div>";
+  }
+
+}        
+else{
+  $msg="<div class='btn btn-danger'>Username is wrong</div>";
 }
-
 }
 
 ?>
@@ -124,15 +128,6 @@ if (isset($_POST["btnlogin"])) {
 
                 </div>
               </div>
-
-              <div class="credits">
-                <!-- All the links in the footer should remain intact. -->
-                <!-- You can delete the links only if you purchased the pro version. -->
-                <!-- Licensing information: https://bootstrapmade.com/license/ -->
-                <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
-                Designed by <a href="#">Hazzlewood</a>
-              </div>
-
             </div>
           </div>
         </div>
