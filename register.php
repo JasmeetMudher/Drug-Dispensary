@@ -1,4 +1,7 @@
 <?php
+
+session_start();
+
 include 'connection.php';
 include 'crud.php';
 $msg = '';

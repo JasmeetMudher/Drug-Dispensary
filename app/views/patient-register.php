@@ -1,9 +1,9 @@
 <?php
 
-require_once 'UserController.php';
-
+require_once '/app/views/patient-register.php';
 $servername = "localhost";
 $username = "root";
+
 $password = "123pass";
 $dbname = "drugdispensary";
 

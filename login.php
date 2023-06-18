@@ -1,30 +1,65 @@
 <?php
-session_start();
-//include 'connect.php';
-include 'crud.php';
-$msg = '';
+  session_start();
+  include('connection.php');
+  include('functions.php');
 
-$crud = new CRUD("localhost","root","123pass","drugdispensary");
+  $msg = " ";
 
-if (isset($_POST["btnlogin"])) {
-  $password = ($_POST["password"]);
-  $userssn = $_POST["ssn"];
+  if($_SERVER['REQUEST_METHOD'] == "POST"){
 
-  //$user = $crud->getUserBySSN($userssn);
+    $pass = $_POST["password"];
+    $ssn = $_POST["ssn"];
 
-  if ($user && password_verify($password, $user['password'])) {
-    // Authentication successful
-    $_SESSION['user_id'] = $user['ssn'];
-    $_SESSION['username'] = $user['username'];
-    echo "Login successful. Welcome, " . $user['username'];
-} else {
-    // Authentication failed
-    echo "Invalid username or password.";
-}
+    /* 
+      Check on the multiple ways of doing this
+        1. where username and pass = ;
+          here we have a tenart operator which will return only one thing
+    */
 
-}
 
-  ?>
+    $patients_query = "select * from patients where ssn = '$ssn' and password = '$pass' limit 1";
+    $doctors_query = "select * from patients where ssn = '$ssn' and password = '$pass' limit 1";
+
+    //$result = mysqli_query($con,$query);
+
+    //only one can be returned since simillar ssns can't share passwords
+    //for now we move both to a one dashboard but in future the dashboards will be different 
+    if(mysqli_query($con,$patients_query)){
+      //the case that a patient matches
+      $result = mysqli_query($con,$patients_query);
+      $_SESSION['usertype'] = "Patients";
+    }else if(mysqli_query($con, $doctors_query)){
+      //the case that a doctor matches
+      $result = mysqli_query($con,$doctors_queryquery);
+      $_SESSION['usertype'] = "Doctors";
+    }else {
+      $result = NIL;
+    }
+
+    if($result){
+      if($result && mysqli_num_rows($result) > 0){
+        $user_data = mysqli_fetch_assoc($result);
+
+    
+        if($user_data['password'] === $pass ){
+          $_SESSION['ID'] = $user_data['ID'];
+          $_SESSION['Name'] = $user_data['Fname'].' '.$user_data['Lname'];
+          $msg =  $_SESSION['Name'];
+          header("Location: dashboard.php");
+        }else{
+          echo($user_data['password']);
+        }
+      }else{
+        echo("no such user");
+      }
+    }else { 
+      echo 'user not found';
+    }
+
+  }
+
+
+?>
 
   <!DOCTYPE html>
   <html lang="en">

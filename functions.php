@@ -1,8 +1,8 @@
-<?php 
+<?php
     function check_login($con) {
-        if(isset($_SESSION['password'])) {
-            $id = $_SESSION['password'];
-            $query = "select * from users where password = '$id' limit 1";
+        if(isset($_SESSION['ID'])){
+            $id = $_SESSION['ID'];
+            $query = "select * from patients where ID = '$id' limit 1";
 
             $result = mysqli_query($con,$query);
             if($result && mysqli_num_rows($result) > 0){
@@ -10,8 +10,7 @@
                 return $user_data;
             }
         }
-
-        header("Location: index.php");
+        // Hapa inakuforce urudi kwa login poage
+        header("Location: login.php");
         die;
     }
-?>
