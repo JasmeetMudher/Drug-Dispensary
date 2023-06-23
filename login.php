@@ -18,7 +18,7 @@
 
 
     $patients_query = "select * from patients where ssn = '$ssn' and password = '$pass' limit 1";
-    $doctors_query = "select * from patients where ssn = '$ssn' and password = '$pass' limit 1";
+    $doctors_query = "select * from doctors where ssn = '$ssn' and password = '$pass' limit 1";
 
     //$result = mysqli_query($con,$query);
 
@@ -27,11 +27,17 @@
     if(mysqli_query($con,$patients_query)){
       //the case that a patient matches
       $result = mysqli_query($con,$patients_query);
-      $_SESSION['usertype'] = "Patients";
+      $_SESSION['usertype'] = "patient";
+
+      $msg = "user not patient";
     }else if(mysqli_query($con, $doctors_query)){
       //the case that a doctor matches
-      $result = mysqli_query($con,$doctors_queryquery);
-      $_SESSION['usertype'] = "Doctors";
+      $result = mysqli_query($con,$doctors_query);
+      $_SESSION['usertype'] = "doctor";
+
+      header("Location: dashboard.php");
+
+      $msg = "user not doctor";
     }else {
       $result = NIL;
     }
@@ -44,7 +50,7 @@
         if($user_data['password'] === $pass ){
           $_SESSION['ID'] = $user_data['ID'];
           $_SESSION['Name'] = $user_data['Fname'].' '.$user_data['Lname'];
-          $msg =  $_SESSION['Name'];
+          $msg =  $_SESSION['Name']; 
           header("Location: dashboard.php");
         }else{
           echo($user_data['password']);
@@ -116,6 +122,7 @@
                   <div class="card-body">
                     <div><?php echo $msg; ?> </div>
                     <div class="pt-4 pb-2">
+                      <?php echo $msg; ?>
                       <h5 class="card-title text-center pb-0 fs-4">Login to Your Account</h5>
                       <p class="text-center small">Enter your SSN & password to login</p>
                     </div>
