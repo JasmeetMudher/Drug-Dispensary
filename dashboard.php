@@ -43,6 +43,7 @@
 
   <!-- Template Main CSS File -->
   <link href="/assets/css/style.css" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/css/table-styling.css">
 
   <!-- =======================================================
   * Template Name: NiceAdmin - v2.2.0
