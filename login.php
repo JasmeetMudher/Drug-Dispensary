@@ -5,59 +5,57 @@
 
   $msg = " ";
 
-  if($_SERVER['REQUEST_METHOD'] == "POST"){
-
-    $pass = $_POST["password"];
+  if(isset($_POST["btnlogin"])) {
+    $user_password = $_POST["password"];
     $ssn = $_POST["ssn"];
 
-    /* 
-      Check on the multiple ways of doing this
-        1. where username and pass = ;
-          here we have a tenart operator which will return only one thing
-    */
+    $login_query = "select * from doctors where ssn = '$ssn' and password = '$user_password' limit 1;
+                    select * from patients where ssn = '$ssn' and password = '$user_password' limit 1;";
 
+    $con->multi_query($login_query);
 
-    $patients_query = "select * from patients where ssn = '$ssn' and password = '$pass' limit 1";
-    $doctors_query = "select * from patients where ssn = '$ssn' and password = '$pass' limit 1";
+    $results = array(); // Array to store the results
 
-    //$result = mysqli_query($con,$query);
-
-    //only one can be returned since simillar ssns can't share passwords
-    //for now we move both to a one dashboard but in future the dashboards will be different 
-    if(mysqli_query($con,$patients_query)){
-      //the case that a patient matches
-      $result = mysqli_query($con,$patients_query);
-      $_SESSION['usertype'] = "Patients";
-    }else if(mysqli_query($con, $doctors_query)){
-      //the case that a doctor matches
-      $result = mysqli_query($con,$doctors_queryquery);
-      $_SESSION['usertype'] = "Doctors";
-    }else {
-      $result = NIL;
-    }
-
-    if($result){
-      if($result && mysqli_num_rows($result) > 0){
-        $user_data = mysqli_fetch_assoc($result);
-
-    
-        if($user_data['password'] === $pass ){
-          $_SESSION['ID'] = $user_data['ID'];
-          $_SESSION['Name'] = $user_data['Fname'].' '.$user_data['Lname'];
-          $msg =  $_SESSION['Name'];
-          header("Location: dashboard.php");
-        }else{
-          echo($user_data['password']);
-        }
-      }else{
-        echo("no such user");
+    do {
+      if ($result = $con->store_result()) {
+        $results[] = $result->fetch_all(MYSQLI_ASSOC);
+        $result->free();
       }
-    }else { 
-      echo 'user not found';
+    } while ($con->next_result());
+  
+    if($results[0]){
+      $user_data = $results[0][0];
+      $_SESSION['ID'] = $results[0][0]['ID'];
+      $_SESSION['Name'] = $results[0][0]["Fname"]." ".$results[0][0]["Lname"];
+      $_SESSION['usertype'] = "doctor";
+      header("Location: dashboard.php");
+
+      echo "doctor logic works";
+
+    }else if($results[1]){
+      $user_data = $results[1][0];  
+      $_SESSION['ID'] = $results[1][0]['ID'];
+      $_SESSION['Name'] = $results[1][0]["Fname"]." ".$results[1][0]["Lname"];
+      $_SESSION['usertype'] = "patient";
+      header("Location: dashboard.php");
+
+      echo "patient logic works";
+    }else {
+      echo "No such user";
     }
+
+    // Output the results
+    /*foreach ($results as $index => $array) {
+      echo "Array $index:<br>";
+      foreach ($array as $row) {
+        foreach ($row as $key => $value) {
+          echo "$key: $value<br>";
+        }
+        echo "<br>";
+      }
+    }*/
 
   }
-
 
 ?>
 
@@ -93,12 +91,7 @@
     <!-- Template Main CSS File -->
     <link href="assets/css/style.css" rel="stylesheet">
 
-    <!-- =======================================================
-    * Template Name: NiceAdmin - v2.2.0
-    * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
-    * Author: BootstrapMade.com
-    * License: https://bootstrapmade.com/license/
-    ======================================================== -->
+
   </head>
 
   <body>
@@ -116,6 +109,7 @@
                   <div class="card-body">
                     <div><?php echo $msg; ?> </div>
                     <div class="pt-4 pb-2">
+                      <?php echo $msg; ?>
                       <h5 class="card-title text-center pb-0 fs-4">Login to Your Account</h5>
                       <p class="text-center small">Enter your SSN & password to login</p>
                     </div>
@@ -158,14 +152,6 @@
                     </form>
 
                 </div>
-              </div>
-
-              <div class="credits">
-                <!-- All the links in the footer should remain intact. -->
-                <!-- You can delete the links only if you purchased the pro version. -->
-                <!-- Licensing information: https://bootstrapmade.com/license/ -->
-                <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
-                Designed by <a href="#">Hazzlewood</a>
               </div>
 
             </div>

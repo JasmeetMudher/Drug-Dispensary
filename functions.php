@@ -2,15 +2,23 @@
     function check_login($con) {
         if(isset($_SESSION['ID'])){
             $id = $_SESSION['ID'];
-            $query = "select * from patients where ID = '$id' limit 1";
+            $usertype = $_SESSION['usertype'];
+            $table_name = $usertype."s";
+            $users_query = "SELECT * FROM ".$table_name;
+          
+            $result = $con->query($users_query);
+            $query = "SELECT * FROM ".$table_name." where ID = '$id' limit 1";
 
             $result = mysqli_query($con,$query);
             if($result && mysqli_num_rows($result) > 0){
                 $user_data = mysqli_fetch_assoc($result);
                 return $user_data;
             }
+        } else {
+            header("Location: login.php");
+            die;
         }
-        // Hapa inakuforce urudi kwa login poage
-        header("Location: login.php");
-        die;
+
     }
+
+?>

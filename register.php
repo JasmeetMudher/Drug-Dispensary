@@ -26,7 +26,7 @@ if(isset($_POST["btnsubmit"])){
 
     $crud = new CRUD("localhost","root","123pass","drugdispensary");
 
-    if($crud->create("doctors", $patient_data)){
+    if($crud->create("patients", $patient_data)){
         $msg = "<div class='btn btn-success'>records inserted successfully</div>";
         header("location: dashboard.php");
     }else{
