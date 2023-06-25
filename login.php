@@ -5,64 +5,22 @@
 
   $msg = " ";
 
-  if($_SERVER['REQUEST_METHOD'] == "POST"){
-
-    $pass = $_POST["password"];
+  if(isset($_POST["btnlogin"])) {
+    $user_password = $_POST["password"];
     $ssn = $_POST["ssn"];
 
-    /* 
-      Check on the multiple ways of doing this
-        1. where username and pass = ;
-          here we have a tenart operator which will return only one thing
-    */
+    $login_query = "select * from doctors where ssn = '$ssn' and password = '$user_password' limit 1";
 
+    $result = mysqli_query($con, $login_query);
 
-    $patients_query = "select * from patients where ssn = '$ssn' and password = '$pass' limit 1";
-    $doctors_query = "select * from doctors where ssn = '$ssn' and password = '$pass' limit 1";
+    $user_data = mysqli_fetch_assoc($result); 
 
-    //$result = mysqli_query($con,$query);
+    print_r($user_data);
 
-    //only one can be returned since simillar ssns can't share passwords
-    //for now we move both to a one dashboard but in future the dashboards will be different 
-    if(mysqli_query($con,$patients_query)){
-      //the case that a patient matches
-      $result = mysqli_query($con,$patients_query);
-      $_SESSION['usertype'] = "patient";
-
-      $msg = "user not patient";
-    }else if(mysqli_query($con, $doctors_query)){
-      //the case that a doctor matches
-      $result = mysqli_query($con,$doctors_query);
-      $_SESSION['usertype'] = "doctor";
-
-      header("Location: dashboard.php");
-
-      $msg = "user not doctor";
-    }else {
-      $result = NIL;
-    }
-
-    if($result){
-      if($result && mysqli_num_rows($result) > 0){
-        $user_data = mysqli_fetch_assoc($result);
-
-    
-        if($user_data['password'] === $pass ){
-          $_SESSION['ID'] = $user_data['ID'];
-          $_SESSION['Name'] = $user_data['Fname'].' '.$user_data['Lname'];
-          $msg =  $_SESSION['Name']; 
-          header("Location: dashboard.php");
-        }else{
-          echo($user_data['password']);
-        }
-      }else{
-        echo("no such user");
-      }
-    }else { 
-      echo 'user not found';
-    }
+    $_SESSION["usertype"] = "doctor";
 
   }
+
 
 
 ?>
@@ -99,12 +57,7 @@
     <!-- Template Main CSS File -->
     <link href="assets/css/style.css" rel="stylesheet">
 
-    <!-- =======================================================
-    * Template Name: NiceAdmin - v2.2.0
-    * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
-    * Author: BootstrapMade.com
-    * License: https://bootstrapmade.com/license/
-    ======================================================== -->
+
   </head>
 
   <body>
@@ -165,14 +118,6 @@
                     </form>
 
                 </div>
-              </div>
-
-              <div class="credits">
-                <!-- All the links in the footer should remain intact. -->
-                <!-- You can delete the links only if you purchased the pro version. -->
-                <!-- Licensing information: https://bootstrapmade.com/license/ -->
-                <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
-                Designed by <a href="#">Hazzlewood</a>
               </div>
 
             </div>
