@@ -9,19 +9,53 @@
     $user_password = $_POST["password"];
     $ssn = $_POST["ssn"];
 
-    $login_query = "select * from doctors where ssn = '$ssn' and password = '$user_password' limit 1";
+    $login_query = "select * from doctors where ssn = '$ssn' and password = '$user_password' limit 1;
+                    select * from patients where ssn = '$ssn' and password = '$user_password' limit 1;";
 
-    $result = mysqli_query($con, $login_query);
+    $con->multi_query($login_query);
 
-    $user_data = mysqli_fetch_assoc($result); 
+    $results = array(); // Array to store the results
 
-    print_r($user_data);
+    do {
+      if ($result = $con->store_result()) {
+        $results[] = $result->fetch_all(MYSQLI_ASSOC);
+        $result->free();
+      }
+    } while ($con->next_result());
+  
+    if($results[0]){
+      $user_data = $results[0][0];
+      $_SESSION['ID'] = $results[0][0]['ID'];
+      $_SESSION['Name'] = $results[0][0]["Fname"]." ".$results[0][0]["Lname"];
+      $_SESSION['usertype'] = "doctor";
+      header("Location: dashboard.php");
 
-    $_SESSION["usertype"] = "doctor";
+      echo "doctor logic works";
+
+    }else if($results[1]){
+      $user_data = $results[1][0];  
+      $_SESSION['ID'] = $results[1][0]['ID'];
+      $_SESSION['Name'] = $results[1][0]["Fname"]." ".$results[1][0]["Lname"];
+      $_SESSION['usertype'] = "patient";
+      header("Location: dashboard.php");
+
+      echo "patient logic works";
+    }else {
+      echo "No such user";
+    }
+
+    // Output the results
+    /*foreach ($results as $index => $array) {
+      echo "Array $index:<br>";
+      foreach ($array as $row) {
+        foreach ($row as $key => $value) {
+          echo "$key: $value<br>";
+        }
+        echo "<br>";
+      }
+    }*/
 
   }
-
-
 
 ?>
 

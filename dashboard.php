@@ -7,7 +7,8 @@
   $username = $_SESSION['Name'];
   $usertype = $_SESSION['usertype'];
 
-  $user_data =check_login($con);
+  $user_data = check_login($con);
+
 
 ?>
 
@@ -231,8 +232,8 @@
 
           <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
             <li class="dropdown-header">
-              <h6>Kevin Anderson</h6>
-              <span>Web Designer</span>
+              <h6><?php echo $username; ?></h6>
+              <span><?php echo $usertype; ?></span>
             </li>
             <li>
               <hr class="dropdown-divider">
@@ -533,12 +534,49 @@
     </div><!-- End Page Title -->
 
     <section class="section dashboard">
-      
+      <?php  
+          $table_name = $usertype."s";
+          $users_query = "SELECT * FROM ".$table_name;
+        
+          $result = $con->query($users_query);
+      ?>
+      <table border="1" cellspacing="0" cellpadding="10">
+        <tr>
+          <th>SSN</th>
+          <th>Full Name</th>
+          <th>Phone</th>
+          <th>Dob</th>
+          <th>Email</th>
+          <th>address</th>
+        </tr>
+      <?php
+      if ($result->num_rows > 0) {
+        $sn=1;
+        while($data = $result->fetch_assoc()) {
+      ?>
+      <tr>
+        <td><?php echo $data["SSN"]; ?> </td>
+        <td><?php echo $data['Fname']." ".$data['Lname']; ?> </td>
+        <td><?php echo $data['phone']; ?> </td>
+        <td><?php echo $data['dob']; ?> </td>
+        <td><?php echo $data['email']; ?> </td>
+        <td><?php echo $data['address']; ?> </td>
+       
+      <tr>
+      <?php
+        $sn++;}} else { ?>
+          <tr>
+          <td colspan="8">No data found</td>
+          </tr>
+
+      <?php } ?>
+        </table>
+    </section>
 
   </main><!-- End #main -->
 
   <!-- ======= Footer ======= -->
-  <footer id="footer" class="footer">
+  <footer id="footer" class="footer"><
   
   </footer><!-- End Footer -->
 
