@@ -4,8 +4,11 @@
             $id = $_SESSION['ID'];
             $usertype = $_SESSION['usertype'];
 
-
-            $table_name = $usertype."s";
+            if($_SESSION['user-level']){
+                $table_name = $usertype;
+            }else {
+                $table_name = $usertype."s";
+            } 
 
 
             $users_query = "SELECT * FROM ".$table_name;
@@ -19,7 +22,7 @@
                 return $user_data;
             }
         } else {
-            header("Location: login.php");
+            header("Location: business-login.php");
             die;
         }
 

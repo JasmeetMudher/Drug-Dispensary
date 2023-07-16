@@ -2,7 +2,7 @@
 <?php
     session_start();
     include("connection.php");
-    include("functions.php");
+    include("business-functions.php");
     include("crud.php");
   
     $username = $_SESSION['Name'];
@@ -16,8 +16,8 @@
 
     if(isset($_POST["delete-account"])) {
 
-        $db_name = $usertype."s";
-        if($crud->delete($db_name,$user_data["SSN"])) {
+        $db_name = $usertype;
+        if($crud->delete($db_name,$user_data["business_id"])) {
             $msg = "Record Deleted";
         }else {
             $msg = "Error";
@@ -26,35 +26,20 @@
 
     if(isset($_POST["btn-update-changes"])) {
 
-        /*$msg = "clicked";
-
-        $Fname = $_POST["Fname"];
-        $Lname = $_POST["Lname"];
-        $phone = $_POST["phone"];
-        $dob = date('y-m-d',strtotime($_POST["dob"]));
-        $email = $_POST["email"];
-        $address = $_POST["address"];
-
-        $db_name = $usertype."s";
-        $SSN = $user_data["SSN"];
-
-        $sql = "UPDATE patients SET Fname = '$Fname' where SSN = '41243371' ";
-
-        if ($con->query($sql) === TRUE) {
-            $msg = "Record updated successfully";
-          } else {
-            $msg = "Error updating record: " . $con->error;
-          }
+        /*'business_id' => $_POST["business-id"],
+        'name' => $_POST["name"],
+        'phone' => $_POST["phone"],
+        'address' => $_POST["address"],
+        'password' => $_POST["password"],
+        'email' => $_POST["email"]
         */
         $patient_data = array(
-            'Fname' => $_POST["Fname"],
-            'Lname' => $_POST["Lname"],
+            'name' => $_POST["name"],
             'phone' => $_POST["phone"],
-            'dob' => date('y-m-d',strtotime($_POST["dob"])),
             'email' => $_POST["email"],
             'address' => $_POST["address"]
         );
-        if($crud->update($usertype."s",$patient_data,$user_data["SSN"])){
+        if($crud->update($usertype,$patient_data,$user_data["business_id"])){
             $msg ="success";
         }else{
             $msg = "failed";
@@ -694,16 +679,16 @@
                     </div>
 
                     <div class="row mb-3">
-                      <label for="fullName" class="col-md-4 col-lg-3 col-form-label">First Name</label>
+                      <label for="fullName" class="col-md-4 col-lg-3 col-form-label"> Business ID</label>
                       <div class="col-md-8 col-lg-9">
-                        <input name="Fname" type="text" class="form-control" id="fullName" value="<?php echo $user_data["Fname"]; ?>">
+                        <input name="business_id" type="text" class="form-control" id="fullName" value="<?php echo $user_data["business_id"]; ?>">
                       </div>
                     </div>
 
                     <div class="row mb-3">
-                      <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Last Name</label>
+                      <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Name</label>
                       <div class="col-md-8 col-lg-9">
-                        <input name="Lname" type="text" class="form-control" id="fullName" value="<?php echo $user_data["Lname"]; ?>">
+                        <input name="name" type="text" class="form-control" id="fullName" value="<?php echo $user_data["name"]; ?>">
                       </div>
                     </div>
 
@@ -711,13 +696,6 @@
                       <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Phone</label>
                       <div class="col-md-8 col-lg-9">
                         <input name="phone" type="text" class="form-control" id="fullName" value="<?php echo $user_data["phone"]; ?>">
-                      </div>
-                    </div>
-
-                    <div class="row mb-3">
-                      <label for="fullName" class="col-md-4 col-lg-3 col-form-label">D.O.B</label>
-                      <div class="col-md-8 col-lg-9">
-                        <input name="dob" type="text" class="form-control" id="fullName" value="<?php echo $user_data["dob"]; ?>">
                       </div>
                     </div>
 

@@ -21,7 +21,7 @@ class CRUD
         if ($this->conn->query($sql) === TRUE) {
             //return $this->conn->insert_id;
             return true;
-        } else {
+        } else {    
             return false;
         }
     }

@@ -4,7 +4,9 @@
   include("functions.php");
 
   session_start();
+
   $username = $_SESSION['Name'];
+
   $usertype = $_SESSION['usertype'];
 
   $user_data = check_login($con);
@@ -536,7 +538,9 @@
 
     <section class="section dashboard">
       <?php  
+
           $table_name = $usertype."s";
+      
           $users_query = "SELECT * FROM ".$table_name;
         
           $result = $con->query($users_query);

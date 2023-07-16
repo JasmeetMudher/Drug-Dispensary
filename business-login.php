@@ -6,13 +6,13 @@
   $msg = " ";
 
   if(isset($_POST["btnlogin"])) {
-    $user_password = $_POST["password"];
-    $ssn = $_POST["ssn"];
+    $password = $_POST["password"];
+    $business_id = $_POST["business-id"];
 
-    $login_query = "select * from doctors where ssn = '$ssn' and password = '$user_password' limit 1;
-                    select * from patients where ssn = '$ssn' and password = '$user_password' limit 1;";
+    $login_query = "SELECT * FROM pharmacy where business_id = '$business_id' and password = '$password' limit 1;
+                    SELECT * from pharmaceutical_company where business_id = '$business_id' and password = '$password' limit 1;";
 
-    $con->multi_query($login_query);
+    $con->multi_query($login_query);  
 
     $results = array(); // Array to store the results
 
@@ -26,18 +26,21 @@
     if($results[0]){
       $user_data = $results[0][0];
       $_SESSION['ID'] = $results[0][0]['ID'];
-      $_SESSION['Name'] = $results[0][0]["Fname"]." ".$results[0][0]["Lname"];
-      $_SESSION['usertype'] = "doctor";
-      header("Location: dashboard.php");
+      $_SESSION['Name'] = $results[0][0]["name"];
+      $_SESSION['usertype'] = "pharmacy";
+      $_SESSION["user-level"] = "business";
+      header("Location: business-dashboard.php");
 
       echo "doctor logic works";
 
     }else if($results[1]){
       $user_data = $results[1][0];  
       $_SESSION['ID'] = $results[1][0]['ID'];
-      $_SESSION['Name'] = $results[1][0]["Fname"]." ".$results[1][0]["Lname"];
-      $_SESSION['usertype'] = "patient";
-      header("Location: dashboard.php");
+      $_SESSION['Name'] = $results[1][0]["name"];
+      $_SESSION['usertype'] = "pharmaceutical_company";
+      $_SESSION["user-level"] = "business";
+      header("Location: business-dashboard.php");
+
 
       echo "patient logic works";
     }else {
@@ -110,18 +113,18 @@
                     <div><?php echo $msg; ?> </div>
                     <div class="pt-4 pb-2">
                       <?php echo $msg; ?>
-                      <h5 class="card-title text-center pb-0 fs-4">Login to Your Account</h5>
-                      <p class="text-center small">Enter your SSN & password to login</p>
+                      <h5 class="card-title text-center pb-0 fs-4">Login to Business Your Account</h5>
+                      <p class="text-center small">Enter your Business ID  & password to login</p>
                     </div>
 
                     <form class="row g-3 needs-validation" novalidate method="post">
 
                       <div class="col-12">
-                        <label for="yourUsername" class="form-label">SSN</label>
+                        <label for="yourUsername" class="form-label">Business ID</label>
                         <div class="input-group has-validation">
                           <span class="input-group-text" id="inputGroupPrepend"><i class="bi-key-fill"></i></span>
-                          <input type="text" name="ssn" class="form-control" id="yourUsername" placeholder="enter username" required>
-                          <div class="invalid-feedback">Please enter your SSN.</div>
+                          <input type="text" name="business-id" class="form-control" id="yourUsername" placeholder="enter username" required>
+                          <div class="invalid-feedback">Please enter your Business ID.</div>
                         </div>
                       </div>
 
@@ -130,11 +133,8 @@
                         <div class="input-group has-validation">
                           <span class="input-group-text" id="inputGroupPrepend"><i class="bi-lock-fill"></i></span>
                           <input type="password" name="password" class="form-control" id="yourPassword" placeholder="enter password" required>
-                          <div class="invalid-feedback">Please enter your password!<< /div>
+                          <div class="invalid-feedback">Please enter your password! </div>
                           </div>
-
-
-
                         </div>
 
                         <div class="col-12">
@@ -147,12 +147,12 @@
                           <button class="btn btn-primary w-100" type="submit" name="btnlogin">Login</button>
                         </div>
                         <div class="col-12">
-                          <p class="small mb-0">Don't have account ? <a href="register.php">Create an account</a></p>
+                          <p class="small mb-0">Don't Business account? <a href="business-register.php">Create one here</a></p>
                         </div>
                         <div class="col-12">
-                          <p class="small mb-0">Are you a business ? <a href="business-login.php">Login here </a></p>
+                          <p class="small mb-0">Are you a doctor or patient ? <a href="login.php">Login from here </a></p>
                         </div>
-                    </form> 
+                    </form>
 
                 </div>
               </div>
