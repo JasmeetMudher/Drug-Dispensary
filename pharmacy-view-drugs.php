@@ -2,6 +2,7 @@
 
   include("connection.php");
   include("business-functions.php");
+  include("crud.php");
 
   session_start();
 
@@ -13,6 +14,23 @@
  
   $user_data = check_login($con);
 
+  if(isset($_POST["request-contract"])){
+
+    $contract_data = array(
+        'pharmacy_id' => $user_data["business_id"],
+        'company_id' => $_POST["company_id"],
+        'contract_start' => date('y-m-d',strtotime($_POST["contract_start"])),
+        'contract_end' => date('y-m-d',strtotime($_POST["contract_end"])),
+    ); 
+
+    $crud = new CRUD("localhost","root","123pass","drugdispensary");
+    if($crud->create('contracts',$contract_data)){
+        header("Location: /pharmacy-view-contracts.php");
+    }else{
+        echo "error";
+    }
+
+  }
 
 ?>
 
@@ -24,7 +42,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Dashboard - NiceAdmin Bootstrap Template</title>
+  <title>View Drugs</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -281,7 +299,7 @@
               </a>
             </li>
 
-          </ul><!-- End Profile Dropdown Items -->
+          </ul><!-- End Profile Dropdown Items -->            
         </li><!-- End Profile Nav -->
 
       </ul>
@@ -295,7 +313,7 @@
     <ul class="sidebar-nav" id="sidebar-nav">
 
       <li class="nav-item">
-        <a class="nav-link " href="index.html">
+        <a class="nav-link " href="/pharmacy-dashboard.php">
           <i class="bi bi-grid"></i>
           <span>Dashboard</span>
         </a>
@@ -305,19 +323,17 @@
 
       <li class="nav-item">
         <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-journal-text"></i><span>Drugs</span><i class="bi bi-chevron-down ms-auto"></i>
+          <i class="bi bi-journal-text"></i><span>Stock</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
         <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <li>
-            <a class="nav-link " href="/pharmacy-buy-drugs.php">
-                <i class="bi bi-grid"></i>
-                <span>Buy Drugs</span>
+            <a href="forms-elements.html">
+              <i class="bi bi-circle"></i><span>Form Elements</span>
             </a>
           </li>
           <li>
-          <a class="nav-link " href="/pharmacy-view-drugs.php">
-                <i class="bi bi-grid"></i>
-                <span>View Drugs</span>
+            <a href="forms-layouts.html">
+              <i class="bi bi-circle"></i><span>Form Layouts</span>
             </a>
           </li>
           <li>
@@ -380,13 +396,8 @@
         </a>
         <ul id="icons-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <li>
-            <a href="/pharmacy-view-contracts.php">
-              <i class="bi bi-circle"></i><span>View Contracts </span>
-            </a>
-          </li>
-          <li>
             <a href="/pharmacy-get-contract.php">
-              <i class="bi bi-circle"></i><span>Get Contract</span>
+              <i class="bi bi-circle"></i><span>View Contracts</span>
             </a>
           </li>
         </ul>
@@ -450,60 +461,51 @@
   <main id="main" class="main">
 
     <div class="pagetitle">
-      <h1>Dashboard</h1>
+      <h1>View Contracts</h1>
       <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-          <li class="breadcrumb-item active">Dashboard</li>
+          <li class="breadcrumb-item active">View Contracts</li>
         </ol>
       </nav>
     </div><!-- End Page Title -->
 
     <section class="section dashboard">
-      <?php  
 
-        if($_SESSION['user-level']){
-          $table_name = $_SESSION['usertype'];
-        }else {
-          $table_name = $usertype."s";
-        }
-          $users_query = "SELECT * FROM ".$table_name;
+        <?php
         
-          $result = $con->query($users_query);
-      ?>
-      <table border="1" cellspacing="0" cellpadding="10">
-        <tr>
-          <th>Business ID</th>
-          <th>Name</th>
-          <th>Phone</th>
-          <th>Email</th>
-          <th>address</th>
-        </tr>
-      <?php
-        if ($result->num_rows > 0) {
-            $sn=1;
-            while($data = $result->fetch_assoc()) {
-        ?>
-      <tr>
-        <td><?php echo $data["business_id"]; ?> </td>
-        <td><?php echo $data["name"]; ?> </td>
-        <td><?php echo $data['phone']; ?> </td>
-        <td><?php echo $data['email']; ?> </td>
-        <td><?php echo $data['address']; ?> </td>
-       
-      <tr>
-      <?php
-        $sn++;}} else { ?>
-          <tr>
-          <td colspan="8">No data found</td>
-          </tr>
+            $business_id = $user_data["business_id"];
+            //echo $business_id;
+            $query = "SELECT * FROM contracts JOIN pharmacy_drugs ON contracts.company_id = pharmacy_drugs.businesss_id WHERE pharmacy_id = '$business_id'";
+            $result = $con->query($query);
 
+            if ($result->num_rows > 0) {
+                $sn=1;
+                while($data = $result->fetch_assoc()) {
+        ?>
+
+         <div class="card">
+            <div class="card-body">
+              <h5 class="card-title"> DRUG ID <?php echo $data["drug_id"]?></h5>
+              <h6 class="card-subtitle mb-2 text-muted"> DRUG NAME <?php echo $data["drug_name"] ?> </h6>
+              <p class="card-text"> QUANTITY <?php echo $data["quantity"] ?></p>
+              <p class="card-text"> PRICE PER UNIT <?php echo $data["price_per_unit"] ?></p>
+
+            </div>
+          </div>
+
+        <?php
+        $sn++;}} else { ?>
+            <p> No Companies Available </p>
       <?php } ?>
 
       <?php
-        print_r($data);
+        //print_r($data);
        ?>
-        </table>
+
+
+
+
     </section>
 
   </main><!-- End #main -->
@@ -530,4 +532,4 @@
 
 </body>
 
-</html>
+</html> 
