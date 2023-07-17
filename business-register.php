@@ -11,26 +11,27 @@ $suc = '';
 
 if(isset($_POST["btnsubmit"])){
 
+    $business_type = $_POST["business-type"];
+
     $patient_data = array(
-
-        'ssn' => $_POST["SSN"],
-        'Fname' => $_POST["fname"],
-        'Lname' => $_POST["lname"],
+        'business_id' => $_POST["business-id"],
+        'name' => $_POST["name"],
         'phone' => $_POST["phone"],
-        'dob' => date('y-m-d',strtotime($_POST["dob"])),
-        'email' => $_POST["email"],
+        'address' => $_POST["address"],
         'password' => $_POST["password"],
-        'address' => $_POST["address"]
-
+        'email' => $_POST["email"],
     );
 
     $crud = new CRUD("localhost","root","123pass","drugdispensary");
 
-    $user_type = $_POST["user-type"];
-
-    if($crud->create($user_type , $patient_data)){
+    if($crud->create($business_type, $patient_data)){
         $msg = "<div class='btn btn-success'>records inserted successfully</div>";
-        header("location: dashboard.php");
+        $_SESSION["Name"] = $_POST["name"];
+        $_SESSION["usertype"] = $_POST["business-type"];
+        $_SESSION["user-level"] = "business";
+        $_SESSION['ID'] = $_POST["business_id"];
+        header("Location: business-dashboard.php");
+
     }else{
         die("Error in creating patient");
     }
@@ -89,60 +90,50 @@ if(isset($_POST["btnsubmit"])){
                   <div><?php echo $msg; ?></div>
                   
                   <div class="pt-4 pb-2">
-                    <h5 class="card-title text-center pb-0 fs-4">Create an Account</h5>
-                    <p class="text-center small">Enter your personal details to create account</p>
+                    <h5 class="card-title text-center pb-0 fs-4">Create a Business Account</h5>
+                    <p class="text-center small">Enter your Business details to create account</p>
                   </div>
 
                   <form class="row g-3 needs-validation" novalidate method="post">
                     <div class="col-12">
-                      <label for="yourName" class="form-label">Your SSN</label>
-                      <input type="text" name="SSN" class="form-control" id="yourName" required>
+                      <label for="yourName" class="form-label">Business ID</label>
+                      <input type="text" name="business-id" class="form-control" id="yourName" required>
                       <div class="invalid-feedback">Please, enter your name!</div>
                     </div>
 
                     <div class="col-12">
-                      <label class="form-label">First Name</label>
-                      <input type="text" name="fname" class="form-control"  id= "yourName" required>
+                      <label class="form-label">Business Name </label>
+                      <input type="text" name="name" class="form-control"  id= "yourName" required>
                     </div>
 
                     <div class="col-12">
-                      <label class="form-label">Last Name</label>
-                      <input type="text" name="lname" class="form-control"  required>
+                      <label class="form-label">Business Phone</label>
+                      <input type="text" name="phone" class="form-control"  required>
                     </div>
 
                     <div class="col-12">
-                      <label class="form-label">DOB</label>
-                      <input type="date" name="dob" class="form-control"  required>
+                      <label class="form-label">Address</label>
+                      <input type="text" name="address" class="form-control"  required>
                     </div>
 
                     <div class="col-12">
-                      <label class="form-label">Phone</label>
-                      <input type="text" name="phone" class="form-control" required>
+                      <label class="form-label">Email</label>
+                      <input type="text" name="email" class="form-control"  required>
                     </div>
 
                     <div class="col-12">
-                      <label class="form-label">Email </label>
-                      <input type="text" name="email" class="form-control" id="yourEmail" required>
-                    </div>
-
-                    <div class="col-12">
-                      <label class="form-label">Address </label>
-                      <input type="text" name="address" class="form-control" id="yourEmail" required>
-                    </div>
-
-                    <div class="col-12">
-                    <label class="form-label">Registering As a ?</label>
+                    <label class="form-label">Business Type</label>
                         <div class="col-sm-10">
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="user-type" id="gridRadios1" value="patients" checked>
+                                <input class="form-check-input" type="radio" name="business-type" id="gridRadios1" value="pharmacy" checked>
                                 <label class="form-check-label" for="gridRadios1">
-                                    Patient
+                                    Pharmacy
                                 </label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="user-type" id="gridRadios2" value="doctors">
+                                <input class="form-check-input" type="radio" name="business-type" id="gridRadios2" value="pharmaceutical_company">
                                 <label class="form-check-label" for="gridRadios2">
-                                    Doctor
+                                    Pharmaecutical Company
                                 </label>
                             </div>
                         </div>
@@ -158,7 +149,7 @@ if(isset($_POST["btnsubmit"])){
                       <button class="btn btn-primary w-100" type="submit" name="btnsubmit">Create Account</button>
                     </div>
                     <div class="col-12">
-                      <p class="small mb-0">Already have an account? <a href="login.php">Log in</a></p>
+                      <p class="small mb-0">Already have an account? <a href="business-login.php">Log in</a></p>
                     </div>
                   </form>
 

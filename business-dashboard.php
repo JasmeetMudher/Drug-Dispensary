@@ -1,14 +1,16 @@
 <?php
 
   include("connection.php");
-  include("functions.php");
+  include("business-functions.php");
 
   session_start();
 
   $username = $_SESSION['Name'];
-
   $usertype = $_SESSION['usertype'];
-
+  if($_SESSION['usertype'] === 'pharmaceutical_company'){
+    $usertype = "Pharmaceutical";
+  }
+ 
   $user_data = check_login($con);
 
 
@@ -243,7 +245,7 @@
             </li>
 
             <li>
-              <a class="dropdown-item d-flex align-items-center" href="userprofile.php">
+              <a class="dropdown-item d-flex align-items-center" href="business-profile.php">
                 <i class="bi bi-person"></i>
                 <span>My Profile</span>
               </a>
@@ -299,87 +301,10 @@
         </a>
       </li><!-- End Dashboard Nav -->
 
-      <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-menu-button-wide"></i><span>Components</span><i class="bi bi-chevron-down ms-auto"></i>
-        </a>
-        <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-          <li>
-            <a href="components-alerts.html">
-              <i class="bi bi-circle"></i><span>Alerts</span>
-            </a>
-          </li>
-          <li>
-            <a href="components-accordion.html">
-              <i class="bi bi-circle"></i><span>Accordion</span>
-            </a>
-          </li>
-          <li>
-            <a href="components-badges.html">
-              <i class="bi bi-circle"></i><span>Badges</span>
-            </a>
-          </li>
-          <li>
-            <a href="components-breadcrumbs.html">
-              <i class="bi bi-circle"></i><span>Breadcrumbs</span>
-            </a>
-          </li>
-          <li>
-            <a href="components-buttons.html">
-              <i class="bi bi-circle"></i><span>Buttons</span>
-            </a>
-          </li>
-          <li>
-            <a href="components-cards.html">
-              <i class="bi bi-circle"></i><span>Cards</span>
-            </a>
-          </li>
-          <li>
-            <a href="components-carousel.html">
-              <i class="bi bi-circle"></i><span>Carousel</span>
-            </a>
-          </li>
-          <li>
-            <a href="components-list-group.html">
-              <i class="bi bi-circle"></i><span>List group</span>
-            </a>
-          </li>
-          <li>
-            <a href="components-modal.html">
-              <i class="bi bi-circle"></i><span>Modal</span>
-            </a>
-          </li>
-          <li>
-            <a href="components-tabs.html">
-              <i class="bi bi-circle"></i><span>Tabs</span>
-            </a>
-          </li>
-          <li>
-            <a href="components-pagination.html">
-              <i class="bi bi-circle"></i><span>Pagination</span>
-            </a>
-          </li>
-          <li>
-            <a href="components-progress.html">
-              <i class="bi bi-circle"></i><span>Progress</span>
-            </a>
-          </li>
-          <li>
-            <a href="components-spinners.html">
-              <i class="bi bi-circle"></i><span>Spinners</span>
-            </a>
-          </li>
-          <li>
-            <a href="components-tooltips.html">
-              <i class="bi bi-circle"></i><span>Tooltips</span>
-            </a>
-          </li>
-        </ul>
-      </li><!-- End Components Nav -->
 
       <li class="nav-item">
         <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-journal-text"></i><span>Forms</span><i class="bi bi-chevron-down ms-auto"></i>
+          <i class="bi bi-journal-text"></i><span>Stock</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
         <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <li>
@@ -407,7 +332,7 @@
 
       <li class="nav-item">
         <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-layout-text-window-reverse"></i><span>Tables</span><i class="bi bi-chevron-down ms-auto"></i>
+          <i class="bi bi-layout-text-window-reverse"></i><span>Orders</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
         <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <li>
@@ -425,7 +350,7 @@
 
       <li class="nav-item">
         <a class="nav-link collapsed" data-bs-target="#charts-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-bar-chart"></i><span>Charts</span><i class="bi bi-chevron-down ms-auto"></i>
+          <i class="bi bi-bar-chart"></i><span>Buy</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
         <ul id="charts-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <li>
@@ -448,7 +373,7 @@
 
       <li class="nav-item">
         <a class="nav-link collapsed" data-bs-target="#icons-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-gem"></i><span>Icons</span><i class="bi bi-chevron-down ms-auto"></i>
+          <i class="bi bi-gem"></i><span>Get Contract</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
         <ul id="icons-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <li>
@@ -539,31 +464,32 @@
     <section class="section dashboard">
       <?php  
 
+        if($_SESSION['user-level']){
+          $table_name = $_SESSION['usertype'];
+        }else {
           $table_name = $usertype."s";
-      
+        }
           $users_query = "SELECT * FROM ".$table_name;
         
           $result = $con->query($users_query);
       ?>
       <table border="1" cellspacing="0" cellpadding="10">
         <tr>
-          <th>SSN</th>
-          <th>Full Name</th>
+          <th>Business ID</th>
+          <th>Name</th>
           <th>Phone</th>
-          <th>Dob</th>
           <th>Email</th>
           <th>address</th>
         </tr>
       <?php
-      if ($result->num_rows > 0) {
-        $sn=1;
-        while($data = $result->fetch_assoc()) {
-      ?>
+        if ($result->num_rows > 0) {
+            $sn=1;
+            while($data = $result->fetch_assoc()) {
+        ?>
       <tr>
-        <td><?php echo $data["SSN"]; ?> </td>
-        <td><?php echo $data['Fname']." ".$data['Lname']; ?> </td>
+        <td><?php echo $data["business_id"]; ?> </td>
+        <td><?php echo $data["name"]; ?> </td>
         <td><?php echo $data['phone']; ?> </td>
-        <td><?php echo $data['dob']; ?> </td>
         <td><?php echo $data['email']; ?> </td>
         <td><?php echo $data['address']; ?> </td>
        
@@ -575,6 +501,10 @@
           </tr>
 
       <?php } ?>
+
+      <?php
+        print_r($data);
+       ?>
         </table>
     </section>
 
