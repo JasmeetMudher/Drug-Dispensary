@@ -1,7 +1,7 @@
 <?php
   session_start();
   include('connection.php');
-  include('functions.php');
+  //include('business-functions.php');
 
   $msg = " ";
 
@@ -29,8 +29,9 @@
       $_SESSION['Name'] = $results[0][0]["name"];
       $_SESSION['usertype'] = "pharmacy";
       $_SESSION["user-level"] = "business";
-      header("Location: business-dashboard.php");
+      header("Location: pharmacy-dashboard.php");
 
+    
       echo "doctor logic works";
 
     }else if($results[1]){
@@ -39,7 +40,7 @@
       $_SESSION['Name'] = $results[1][0]["name"];
       $_SESSION['usertype'] = "pharmaceutical_company";
       $_SESSION["user-level"] = "business";
-      header("Location: business-dashboard.php");
+      header("Location: company-dashboard.php");
 
 
       echo "patient logic works";
@@ -48,7 +49,7 @@
     }
 
     // Output the results
-    /*foreach ($results as $index => $array) {
+    foreach ($results as $index => $array) {
       echo "Array $index:<br>";
       foreach ($array as $row) {
         foreach ($row as $key => $value) {
@@ -56,7 +57,7 @@
         }
         echo "<br>";
       }
-    }*/
+    }
 
   }
 

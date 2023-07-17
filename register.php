@@ -26,7 +26,9 @@ if(isset($_POST["btnsubmit"])){
 
     $crud = new CRUD("localhost","root","123pass","drugdispensary");
 
-    if($crud->create("patients", $patient_data)){
+    $user_type = $_POST["user-type"];
+
+    if($crud->create($user_type , $patient_data)){
         $msg = "<div class='btn btn-success'>records inserted successfully</div>";
         header("location: dashboard.php");
     }else{
@@ -126,6 +128,24 @@ if(isset($_POST["btnsubmit"])){
                     <div class="col-12">
                       <label class="form-label">Address </label>
                       <input type="text" name="address" class="form-control" id="yourEmail" required>
+                    </div>
+
+                    <div class="col-12">
+                    <label class="form-label">Registering As a ?</label>
+                        <div class="col-sm-10">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="user-type" id="gridRadios1" value="patients" checked>
+                                <label class="form-check-label" for="gridRadios1">
+                                    Patient
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="user-type" id="gridRadios2" value="doctors">
+                                <label class="form-check-label" for="gridRadios2">
+                                    Doctor
+                                </label>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="col-12">
