@@ -14,6 +14,24 @@
  
   $user_data = check_login($con);
 
+  if(isset($_POST["request-contract"])){
+
+    $contract_data = array(
+        'pharmacy_id' => $user_data["business_id"],
+        'company_id' => $_POST["company_id"],
+        'contract_start' => date('y-m-d',strtotime($_POST["contract_start"])),
+        'contract_end' => date('y-m-d',strtotime($_POST["contract_end"])),
+    ); 
+
+    $crud = new CRUD("localhost","root","123pass","drugdispensary");
+    if($crud->create('contracts',$contract_data)){
+        header("Location: /pharmacy-view-contracts.php");
+    }else{
+        echo "error";
+    }
+
+  }
+
 ?>
 
 
@@ -24,7 +42,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Get Contract</title>
+  <title>View Drugs</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -65,15 +83,15 @@
     <div class="d-flex align-items-center justify-content-between">
       <a href="index.html" class="logo d-flex align-items-center">
         <img src="assets/img/logo.png" alt="">
-        <span class="d-none d-lg-block">BUY DRUGS x </span>
+        <span class="d-none d-lg-block"><?php echo $usertype ?></span>
       </a>
       <i class="bi bi-list toggle-sidebar-btn"></i>
     </div><!-- End Logo -->
 
     <div class="search-bar">
-      <form class="search-form d-flex align-items-center" method="POST">
-        <input type="text" name="drug-name-search" placeholder="Search" title="Enter search keyword">
-        <button type="submit" title="Search" name="search-drug"><i class="bi bi-search"></i></button>
+      <form class="search-form d-flex align-items-center" method="POST" action="#">
+        <input type="text" name="query" placeholder="Search" title="Enter search keyword">
+        <button type="submit" title="Search"><i class="bi bi-search"></i></button>
       </form>
     </div><!-- End Search Bar -->
 
@@ -295,7 +313,7 @@
     <ul class="sidebar-nav" id="sidebar-nav">
 
       <li class="nav-item">
-        <a class="nav-link " href="index.html">
+        <a class="nav-link " href="/pharmacy-dashboard.php">
           <i class="bi bi-grid"></i>
           <span>Dashboard</span>
         </a>
@@ -378,13 +396,8 @@
         </a>
         <ul id="icons-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <li>
-            <a href="icons-bootstrap.html">
-              <i class="bi bi-circle"></i><span>View Contracts </span>
-            </a>
-          </li>
-          <li>
-            <a href="icons-remix.html">
-              <i class="bi bi-circle"></i><span>Get Contract</span>
+            <a href="/pharmacy-get-contract.php">
+              <i class="bi bi-circle"></i><span>View Contracts</span>
             </a>
           </li>
         </ul>
@@ -448,53 +461,22 @@
   <main id="main" class="main">
 
     <div class="pagetitle">
-      <h1>Get Contract</h1>
+      <h1>View Contracts</h1>
       <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-          <li class="breadcrumb-item active">Get Contract</li>
+          <li class="breadcrumb-item active">View Contracts</li>
         </ol>
       </nav>
     </div><!-- End Page Title -->
 
     <section class="section dashboard">
 
-
-        <div class="card-body">
-            <form class = "row g-3 needs-validation" method="post">
-
-                    <div class="input-group mb-3">
-                      <input type="text" class="form-control" name="drug-id" placeholder="Drug ID" aria-label="Username">
-                      <span class="input-group-text">:</span>
-                      <input type="text" class="form-control" name="company-id" placeholder="Company ID" aria-label="Server">
-                      <span class="input-group-text">:</span>
-                      <input type="number" class="form-control" name="quantity" placeholder="Company ID" aria-label="Server">
-                    </div>
-
-                    <div class="col-12">
-                        <input type="submit" value="REQUEST" name="buy-drug" class="btn btn-primary">
-                    </div>
-              </form>
-        </div>
-
         <?php
         
-            if(isset($_POST["search-drug"])){
-      
-            $drug_name_search = $_POST["drug-name-search"];
-
             $business_id = $user_data["business_id"];
-             
-            if($drug_name_search != ""){
-              $query = "SELECT * FROM contracts JOIN company_drugs ON contracts.company_id = company_drugs.businesss_id WHERE pharmacy_id = '$business_id' AND drug_name = '$drug_name_search' ";
-
-            }else {
-              $query = "SELECT * FROM contracts JOIN company_drugs ON contracts.company_id = company_drugs.businesss_id WHERE pharmacy_id = '$business_id'";
-
-            }
-
             //echo $business_id;
-
+            $query = "SELECT * FROM contracts JOIN pharmacy_drugs ON contracts.company_id = pharmacy_drugs.businesss_id WHERE pharmacy_id = '$business_id'";
             $result = $con->query($query);
 
             if ($result->num_rows > 0) {
@@ -504,65 +486,21 @@
 
          <div class="card">
             <div class="card-body">
-              <h5 class="card-title"> Drug Name : <?php echo $data["drug_name"]?></h5>
-              <h5 class="card-title"> Drug ID : <?php echo $data["drug_id"]?></h5>
-              <h5 class="card-title"> Drug Formula : <?php echo $data["drug_formula"]?></h5>
-              <h5 class="card-title"> Quantity Remaining : <?php echo $data["quantity"]?></h5>
-              <h5 class="card-title"> Price Per Unit : <?php echo $data["price_per_unit"]?></h5>
-              <h6 class="card-subtitle mb-2 text-muted"> Company ID : <?php echo $data["company_id"] ?> </h6>
+              <h5 class="card-title"> DRUG ID <?php echo $data["drug_id"]?></h5>
+              <h6 class="card-subtitle mb-2 text-muted"> DRUG NAME <?php echo $data["drug_name"] ?> </h6>
+              <p class="card-text"> QUANTITY <?php echo $data["quantity"] ?></p>
+              <p class="card-text"> PRICE PER UNIT <?php echo $data["price_per_unit"] ?></p>
 
             </div>
           </div>
 
         <?php
         $sn++;}} else { ?>
-            <p> No Such Drug </p>
-      <?php } }?>
+            <p> No Companies Available </p>
+      <?php } ?>
 
       <?php
         //print_r($data);
-
-        $crud = new CRUD("localhost","root","123pass","drugdispensary");
-
-        if(isset($_POST["buy-drug"])) {
-            $drug_id = $_POST["drug-id"];
-            $company_id = $_POST["company-id"];
-            $quantity = $_POST["quantity"];
-
-            $quantity_query = "SELECT * FROM company_drugs WHERE drug_id = '$drug_id' AND businesss_id = '$company_id' LIMIT 1";
-            
-            $quantity_data = $con->query($quantity_query)->fetch_assoc();
-
-            if($quantity > $quantity_data["quantity"]){
-                echo "Reduce The Quantity Wanted ";
-            }else {
-
-                $company_quantity = (int)$quantity_data["quantity"]-(int)$quantity;
-
-                $update_query = "UPDATE company_drugs SET quantity = '$company_quantity' WHERE drug_id = '$drug_id' ";
-
-                $updated_drug_data = array(
-                  'drug_id' => $drug_id,
-                  'businesss_id' => $user_data['business_id'],
-                  'drug_formula' => $quantity_data["drug_formula"],
-                  'drug_name' => $quantity_data["drug_name"],
-                  'quantity' => $quantity,
-                  'price_per_unit' =>  $quantity_data["price_per_unit"] 
-                );
-
-                if($con->query($update_query)){
-                    if ($crud->create('pharmacy_drugs',$updated_drug_data)) {
-                        header("Location: /pharmacy-view-drugs.php ");   
-                    }else {
-                        $msg = "couldn't add drug";
-                    }
-                }else{
-                    $msg = "failed";
-                }
-            }
-
-        }
-        echo $msg;
        ?>
 
 
@@ -594,4 +532,4 @@
 
 </body>
 
-</html>
+</html> 

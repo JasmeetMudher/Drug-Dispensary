@@ -300,27 +300,24 @@
           <span>Dashboard</span>
         </a>
 
-        <a class="nav-link " href="/pharmacy-buy-drugs.php">
-          <i class="bi bi-grid"></i>
-          <span>Buy Drugs</span>
-        </a>
-
       </li><!-- End Dashboard Nav -->
 
 
       <li class="nav-item">
         <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-journal-text"></i><span>Stock</span><i class="bi bi-chevron-down ms-auto"></i>
+          <i class="bi bi-journal-text"></i><span>Drugs</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
         <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <li>
-            <a href="forms-elements.html">
-              <i class="bi bi-circle"></i><span>Form Elements</span>
+            <a class="nav-link " href="/pharmacy-buy-drugs.php">
+                <i class="bi bi-grid"></i>
+                <span>Buy Drugs</span>
             </a>
           </li>
           <li>
-            <a href="forms-layouts.html">
-              <i class="bi bi-circle"></i><span>Form Layouts</span>
+          <a class="nav-link " href="/pharmacy-view-drugs.php">
+                <i class="bi bi-grid"></i>
+                <span>View Drugs</span>
             </a>
           </li>
           <li>
@@ -342,8 +339,8 @@
         </a>
         <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <li>
-            <a href="tables-general.html">
-              <i class="bi bi-circle"></i><span>General Tables</span>
+            <a href="/pharmacy-dispense-drug.php">
+              <i class="bi bi-circle"></i><span>Dispense Drugs</span>
             </a>
           </li>
           <li>

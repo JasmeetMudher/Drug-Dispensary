@@ -2,10 +2,11 @@
     function check_login($con) {
         if(isset($_SESSION['ID'])){
             $id = $_SESSION['ID'];
+            
             $usertype = $_SESSION['usertype'];
 
 
-            $table_name = $usertype."s";
+            $table_name = $usertype.'s';
 
 
             $users_query = "SELECT * FROM ".$table_name;

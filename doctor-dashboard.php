@@ -1,18 +1,16 @@
 <?php
 
   include("connection.php");
-  include("business-functions.php");
-  include("crud.php");
+  include("functions.php");
 
   session_start();
 
   $username = $_SESSION['Name'];
+
   $usertype = $_SESSION['usertype'];
-  if($_SESSION['usertype'] === 'pharmaceutical_company'){
-    $usertype = "Pharmaceutical";
-  }
- 
+
   $user_data = check_login($con);
+
 
 ?>
 
@@ -24,7 +22,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Get Contract</title>
+  <title>Dashboard - NiceAdmin Bootstrap Template</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -65,15 +63,15 @@
     <div class="d-flex align-items-center justify-content-between">
       <a href="index.html" class="logo d-flex align-items-center">
         <img src="assets/img/logo.png" alt="">
-        <span class="d-none d-lg-block">BUY DRUGS x </span>
+        <span class="d-none d-lg-block"><?php echo $usertype ?></span>
       </a>
       <i class="bi bi-list toggle-sidebar-btn"></i>
     </div><!-- End Logo -->
 
     <div class="search-bar">
-      <form class="search-form d-flex align-items-center" method="POST">
-        <input type="text" name="drug-name-search" placeholder="Search" title="Enter search keyword">
-        <button type="submit" title="Search" name="search-drug"><i class="bi bi-search"></i></button>
+      <form class="search-form d-flex align-items-center" method="POST" action="#">
+        <input type="text" name="query" placeholder="Search" title="Enter search keyword">
+        <button type="submit" title="Search"><i class="bi bi-search"></i></button>
       </form>
     </div><!-- End Search Bar -->
 
@@ -245,7 +243,7 @@
             </li>
 
             <li>
-              <a class="dropdown-item d-flex align-items-center" href="business-profile.php">
+              <a class="dropdown-item d-flex align-items-center" href="userprofile.php">
                 <i class="bi bi-person"></i>
                 <span>My Profile</span>
               </a>
@@ -281,7 +279,7 @@
               </a>
             </li>
 
-          </ul><!-- End Profile Dropdown Items -->            
+          </ul><!-- End Profile Dropdown Items -->
         </li><!-- End Profile Nav -->
 
       </ul>
@@ -299,13 +297,89 @@
           <i class="bi bi-grid"></i>
           <span>Dashboard</span>
         </a>
-
       </li><!-- End Dashboard Nav -->
 
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-menu-button-wide"></i><span>Patients</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a href="/doctor-search-patients.php">
+              <i class="bi bi-circle"></i><span>Search Patients</span>
+            </a>
+          </li>
+          <li>
+            <a href="components-accordion.html">
+              <i class="bi bi-circle"></i><span>Accordion</span>
+            </a>
+          </li>
+          <li>
+            <a href="components-badges.html">
+              <i class="bi bi-circle"></i><span>Badges</span>
+            </a>
+          </li>
+          <li>
+            <a href="components-breadcrumbs.html">
+              <i class="bi bi-circle"></i><span>Breadcrumbs</span>
+            </a>
+          </li>
+          <li>
+            <a href="components-buttons.html">
+              <i class="bi bi-circle"></i><span>Buttons</span>
+            </a>
+          </li>
+          <li>
+            <a href="components-cards.html">
+              <i class="bi bi-circle"></i><span>Cards</span>
+            </a>
+          </li>
+          <li>
+            <a href="components-carousel.html">
+              <i class="bi bi-circle"></i><span>Carousel</span>
+            </a>
+          </li>
+          <li>
+            <a href="components-list-group.html">
+              <i class="bi bi-circle"></i><span>List group</span>
+            </a>
+          </li>
+          <li>
+            <a href="components-modal.html">
+              <i class="bi bi-circle"></i><span>Modal</span>
+            </a>
+          </li>
+          <li>
+            <a href="components-tabs.html">
+              <i class="bi bi-circle"></i><span>Tabs</span>
+            </a>
+          </li>
+          <li>
+            <a href="components-pagination.html">
+              <i class="bi bi-circle"></i><span>Pagination</span>
+            </a>
+          </li>
+          <li>
+            <a href="components-progress.html">
+              <i class="bi bi-circle"></i><span>Progress</span>
+            </a>
+          </li>
+          <li>
+            <a href="components-spinners.html">
+              <i class="bi bi-circle"></i><span>Spinners</span>
+            </a>
+          </li>
+          <li>
+            <a href="components-tooltips.html">
+              <i class="bi bi-circle"></i><span>Tooltips</span>
+            </a>
+          </li>
+        </ul>
+      </li><!-- End Components Nav -->
 
       <li class="nav-item">
         <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-journal-text"></i><span>Stock</span><i class="bi bi-chevron-down ms-auto"></i>
+          <i class="bi bi-journal-text"></i><span>Forms</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
         <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <li>
@@ -333,7 +407,7 @@
 
       <li class="nav-item">
         <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-layout-text-window-reverse"></i><span>Orders</span><i class="bi bi-chevron-down ms-auto"></i>
+          <i class="bi bi-layout-text-window-reverse"></i><span>Tables</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
         <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <li>
@@ -351,7 +425,7 @@
 
       <li class="nav-item">
         <a class="nav-link collapsed" data-bs-target="#charts-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-bar-chart"></i><span>Buy</span><i class="bi bi-chevron-down ms-auto"></i>
+          <i class="bi bi-bar-chart"></i><span>Charts</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
         <ul id="charts-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <li>
@@ -374,17 +448,22 @@
 
       <li class="nav-item">
         <a class="nav-link collapsed" data-bs-target="#icons-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-gem"></i><span>Contracts</span><i class="bi bi-chevron-down ms-auto"></i>
+          <i class="bi bi-gem"></i><span>Icons</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
         <ul id="icons-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <li>
             <a href="icons-bootstrap.html">
-              <i class="bi bi-circle"></i><span>View Contracts </span>
+              <i class="bi bi-circle"></i><span>Bootstrap Icons</span>
             </a>
           </li>
           <li>
             <a href="icons-remix.html">
-              <i class="bi bi-circle"></i><span>Get Contract</span>
+              <i class="bi bi-circle"></i><span>Remix Icons</span>
+            </a>
+          </li>
+          <li>
+            <a href="icons-boxicons.html">
+              <i class="bi bi-circle"></i><span>Boxicons</span>
             </a>
           </li>
         </ul>
@@ -448,126 +527,55 @@
   <main id="main" class="main">
 
     <div class="pagetitle">
-      <h1>Get Contract</h1>
+      <h1>Dashboard</h1>
       <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-          <li class="breadcrumb-item active">Get Contract</li>
+          <li class="breadcrumb-item active">Dashboard</li>
         </ol>
       </nav>
     </div><!-- End Page Title -->
 
     <section class="section dashboard">
+      <?php  
 
-
-        <div class="card-body">
-            <form class = "row g-3 needs-validation" method="post">
-
-                    <div class="input-group mb-3">
-                      <input type="text" class="form-control" name="drug-id" placeholder="Drug ID" aria-label="Username">
-                      <span class="input-group-text">:</span>
-                      <input type="text" class="form-control" name="company-id" placeholder="Company ID" aria-label="Server">
-                      <span class="input-group-text">:</span>
-                      <input type="number" class="form-control" name="quantity" placeholder="Company ID" aria-label="Server">
-                    </div>
-
-                    <div class="col-12">
-                        <input type="submit" value="REQUEST" name="buy-drug" class="btn btn-primary">
-                    </div>
-              </form>
-        </div>
-
-        <?php
-        
-            if(isset($_POST["search-drug"])){
+          $table_name = $usertype."s";
       
-            $drug_name_search = $_POST["drug-name-search"];
-
-            $business_id = $user_data["business_id"];
-             
-            if($drug_name_search != ""){
-              $query = "SELECT * FROM contracts JOIN company_drugs ON contracts.company_id = company_drugs.businesss_id WHERE pharmacy_id = '$business_id' AND drug_name = '$drug_name_search' ";
-
-            }else {
-              $query = "SELECT * FROM contracts JOIN company_drugs ON contracts.company_id = company_drugs.businesss_id WHERE pharmacy_id = '$business_id'";
-
-            }
-
-            //echo $business_id;
-
-            $result = $con->query($query);
-
-            if ($result->num_rows > 0) {
-                $sn=1;
-                while($data = $result->fetch_assoc()) {
-        ?>
-
-         <div class="card">
-            <div class="card-body">
-              <h5 class="card-title"> Drug Name : <?php echo $data["drug_name"]?></h5>
-              <h5 class="card-title"> Drug ID : <?php echo $data["drug_id"]?></h5>
-              <h5 class="card-title"> Drug Formula : <?php echo $data["drug_formula"]?></h5>
-              <h5 class="card-title"> Quantity Remaining : <?php echo $data["quantity"]?></h5>
-              <h5 class="card-title"> Price Per Unit : <?php echo $data["price_per_unit"]?></h5>
-              <h6 class="card-subtitle mb-2 text-muted"> Company ID : <?php echo $data["company_id"] ?> </h6>
-
-            </div>
-          </div>
-
-        <?php
-        $sn++;}} else { ?>
-            <p> No Such Drug </p>
-      <?php } }?>
-
+          $users_query = "SELECT * FROM ".$table_name;
+        
+          $result = $con->query($users_query);
+      ?>
+      <table border="1" cellspacing="0" cellpadding="10">
+        <tr>
+          <th>SSN</th>
+          <th>Full Name</th>
+          <th>Phone</th>
+          <th>Dob</th>
+          <th>Email</th>
+          <th>address</th>
+        </tr>
       <?php
-        //print_r($data);
+      if ($result->num_rows > 0) {
+        $sn=1;
+        while($data = $result->fetch_assoc()) {
+      ?>
+      <tr>
+        <td><?php echo $data["SSN"]; ?> </td>
+        <td><?php echo $data['Fname']." ".$data['Lname']; ?> </td>
+        <td><?php echo $data['phone']; ?> </td>
+        <td><?php echo $data['dob']; ?> </td>
+        <td><?php echo $data['email']; ?> </td>
+        <td><?php echo $data['address']; ?> </td>
+       
+      <tr>
+      <?php
+        $sn++;}} else { ?>
+          <tr>
+          <td colspan="8">No data found</td>
+          </tr>
 
-        $crud = new CRUD("localhost","root","123pass","drugdispensary");
-
-        if(isset($_POST["buy-drug"])) {
-            $drug_id = $_POST["drug-id"];
-            $company_id = $_POST["company-id"];
-            $quantity = $_POST["quantity"];
-
-            $quantity_query = "SELECT * FROM company_drugs WHERE drug_id = '$drug_id' AND businesss_id = '$company_id' LIMIT 1";
-            
-            $quantity_data = $con->query($quantity_query)->fetch_assoc();
-
-            if($quantity > $quantity_data["quantity"]){
-                echo "Reduce The Quantity Wanted ";
-            }else {
-
-                $company_quantity = (int)$quantity_data["quantity"]-(int)$quantity;
-
-                $update_query = "UPDATE company_drugs SET quantity = '$company_quantity' WHERE drug_id = '$drug_id' ";
-
-                $updated_drug_data = array(
-                  'drug_id' => $drug_id,
-                  'businesss_id' => $user_data['business_id'],
-                  'drug_formula' => $quantity_data["drug_formula"],
-                  'drug_name' => $quantity_data["drug_name"],
-                  'quantity' => $quantity,
-                  'price_per_unit' =>  $quantity_data["price_per_unit"] 
-                );
-
-                if($con->query($update_query)){
-                    if ($crud->create('pharmacy_drugs',$updated_drug_data)) {
-                        header("Location: /pharmacy-view-drugs.php ");   
-                    }else {
-                        $msg = "couldn't add drug";
-                    }
-                }else{
-                    $msg = "failed";
-                }
-            }
-
-        }
-        echo $msg;
-       ?>
-
-
-
-
+      <?php } ?>
+        </table>
     </section>
 
   </main><!-- End #main -->
