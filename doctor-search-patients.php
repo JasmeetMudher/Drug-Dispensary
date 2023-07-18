@@ -1,18 +1,18 @@
 <?php
 
-  include("connection.php");
-  include("functions.php");
-  include("crud.php");
+include("connection.php");
+include("functions.php");
+include("crud.php");
 
-  session_start();
+session_start();
 
-  $username = $_SESSION['Name'];
-  $usertype = $_SESSION['usertype'];
-  if($_SESSION['usertype'] === 'pharmaceutical_company'){
-    $usertype = "Pharmaceutical";
-  }
- 
-  $user_data = check_login($con);
+$username = $_SESSION['Name'];
+$usertype = $_SESSION['usertype'];
+if ($_SESSION['usertype'] === 'pharmaceutical_company') {
+  $usertype = "Pharmaceutical";
+}
+
+$user_data = check_login($con);
 
 ?>
 
@@ -65,15 +65,15 @@
     <div class="d-flex align-items-center justify-content-between">
       <a href="index.html" class="logo d-flex align-items-center">
         <img src="assets/img/logo.png" alt="">
-        <span class="d-none d-lg-block">BUY DRUGS x </span>
+        <span class="d-none d-lg-block"><?php echo $usertype ?></span>
       </a>
       <i class="bi bi-list toggle-sidebar-btn"></i>
     </div><!-- End Logo -->
 
     <div class="search-bar">
-      <form class="search-form d-flex align-items-center" method="POST">
-        <input type="text" name="drug-name-search" placeholder="Search" title="Enter search keyword">
-        <button type="submit" title="Search" name="search-drug"><i class="bi bi-search"></i></button>
+      <form class="search-form d-flex align-items-center" method="POST" action="#">
+        <input type="text" name="query" placeholder="Search" title="Enter search keyword">
+        <button type="submit" title="Search"><i class="bi bi-search"></i></button>
       </form>
     </div><!-- End Search Bar -->
 
@@ -86,152 +86,12 @@
           </a>
         </li><!-- End Search Icon-->
 
-        <li class="nav-item dropdown">
-
-          <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
-            <i class="bi bi-bell"></i>
-            <span class="badge bg-primary badge-number">4</span>
-          </a><!-- End Notification Icon -->
-
-          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
-            <li class="dropdown-header">
-              You have 4 new notifications
-              <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li class="notification-item">
-              <i class="bi bi-exclamation-circle text-warning"></i>
-              <div>
-                <h4>Lorem Ipsum</h4>
-                <p>Quae dolorem earum veritatis oditseno</p>
-                <p>30 min. ago</p>
-              </div>
-            </li>
-
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li class="notification-item">
-              <i class="bi bi-x-circle text-danger"></i>
-              <div>
-                <h4>Atque rerum nesciunt</h4>
-                <p>Quae dolorem earum veritatis oditseno</p>
-                <p>1 hr. ago</p>
-              </div>
-            </li>
-
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li class="notification-item">
-              <i class="bi bi-check-circle text-success"></i>
-              <div>
-                <h4>Sit rerum fuga</h4>
-                <p>Quae dolorem earum veritatis oditseno</p>
-                <p>2 hrs. ago</p>
-              </div>
-            </li>
-
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li class="notification-item">
-              <i class="bi bi-info-circle text-primary"></i>
-              <div>
-                <h4>Dicta reprehenderit</h4>
-                <p>Quae dolorem earum veritatis oditseno</p>
-                <p>4 hrs. ago</p>
-              </div>
-            </li>
-
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-            <li class="dropdown-footer">
-              <a href="#">Show all notifications</a>
-            </li>
-
-          </ul><!-- End Notification Dropdown Items -->
-
-        </li><!-- End Notification Nav -->
-
-        <li class="nav-item dropdown">
-
-          <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
-            <i class="bi bi-chat-left-text"></i>
-            <span class="badge bg-success badge-number">3</span>
-          </a><!-- End Messages Icon -->
-
-          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow messages">
-            <li class="dropdown-header">
-              You have 3 new messages
-              <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li class="message-item">
-              <a href="#">
-                <img src="assets/img/messages-1.jpg" alt="" class="rounded-circle">
-                <div>
-                  <h4>Maria Hudson</h4>
-                  <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
-                  <p>4 hrs. ago</p>
-                </div>
-              </a>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li class="message-item">
-              <a href="#">
-                <img src="assets/img/messages-2.jpg" alt="" class="rounded-circle">
-                <div>
-                  <h4>Anna Nelson</h4>
-                  <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
-                  <p>6 hrs. ago</p>
-                </div>
-              </a>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li class="message-item">
-              <a href="#">
-                <img src="assets/img/messages-3.jpg" alt="" class="rounded-circle">
-                <div>
-                  <h4>David Muldon</h4>
-                  <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
-                  <p>8 hrs. ago</p>
-                </div>
-              </a>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li class="dropdown-footer">
-              <a href="#">Show all messages</a>
-            </li>
-
-          </ul><!-- End Messages Dropdown Items -->
-
-        </li><!-- End Messages Nav -->
-
         <li class="nav-item dropdown pe-3">
 
           <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-            <?php echo $username; ?>
+
             <img src="assets/img/profile-img.png" alt="Profile" class="rounded-circle">
+            <?php echo $username; ?>
             <span class="d-none d-md-block dropdown-toggle ps-2"></span>
           </a><!-- End Profile Iamge Icon -->
 
@@ -245,7 +105,7 @@
             </li>
 
             <li>
-              <a class="dropdown-item d-flex align-items-center" href="business-profile.php">
+              <a class="dropdown-item d-flex align-items-center" href="/business-profile.php">
                 <i class="bi bi-person"></i>
                 <span>My Profile</span>
               </a>
@@ -281,7 +141,7 @@
               </a>
             </li>
 
-          </ul><!-- End Profile Dropdown Items -->            
+          </ul><!-- End Profile Dropdown Items -->
         </li><!-- End Profile Nav -->
 
       </ul>
@@ -299,147 +159,39 @@
           <i class="bi bi-grid"></i>
           <span>Dashboard</span>
         </a>
-
       </li><!-- End Dashboard Nav -->
 
-
       <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-journal-text"></i><span>Stock</span><i class="bi bi-chevron-down ms-auto"></i>
+        <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-menu-button-wide"></i><span>Patients</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
-        <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+        <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <li>
-            <a href="forms-elements.html">
-              <i class="bi bi-circle"></i><span>Form Elements</span>
-            </a>
-          </li>
-          <li>
-            <a href="forms-layouts.html">
-              <i class="bi bi-circle"></i><span>Form Layouts</span>
-            </a>
-          </li>
-          <li>
-            <a href="forms-editors.html">
-              <i class="bi bi-circle"></i><span>Form Editors</span>
-            </a>
-          </li>
-          <li>
-            <a href="forms-validation.html">
-              <i class="bi bi-circle"></i><span>Form Validation</span>
+            <a href="/doctor-search-patients.php">
+              <i class="bi bi-circle"></i><span>Search Patients</span>
             </a>
           </li>
         </ul>
-      </li><!-- End Forms Nav -->
+      </li><!-- End Components Nav -->
 
-      <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-layout-text-window-reverse"></i><span>Orders</span><i class="bi bi-chevron-down ms-auto"></i>
-        </a>
-        <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-          <li>
-            <a href="tables-general.html">
-              <i class="bi bi-circle"></i><span>General Tables</span>
-            </a>
-          </li>
-          <li>
-            <a href="tables-data.html">
-              <i class="bi bi-circle"></i><span>Data Tables</span>
-            </a>
-          </li>
-        </ul>
-      </li><!-- End Tables Nav -->
 
-      <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#charts-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-bar-chart"></i><span>Buy</span><i class="bi bi-chevron-down ms-auto"></i>
-        </a>
-        <ul id="charts-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-          <li>
-            <a href="charts-chartjs.html">
-              <i class="bi bi-circle"></i><span>Chart.js</span>
-            </a>
-          </li>
-          <li>
-            <a href="charts-apexcharts.html">
-              <i class="bi bi-circle"></i><span>ApexCharts</span>
-            </a>
-          </li>
-          <li>
-            <a href="charts-echarts.html">
-              <i class="bi bi-circle"></i><span>ECharts</span>
-            </a>
-          </li>
-        </ul>
-      </li><!-- End Charts Nav -->
-
-      <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#icons-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-gem"></i><span>Contracts</span><i class="bi bi-chevron-down ms-auto"></i>
-        </a>
-        <ul id="icons-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-          <li>
-            <a href="icons-bootstrap.html">
-              <i class="bi bi-circle"></i><span>View Contracts </span>
-            </a>
-          </li>
-          <li>
-            <a href="icons-remix.html">
-              <i class="bi bi-circle"></i><span>Get Contract</span>
-            </a>
-          </li>
-        </ul>
-      </li><!-- End Icons Nav -->
 
       <li class="nav-heading">Pages</li>
 
       <li class="nav-item">
-        <a class="nav-link collapsed" href="users-profile.html">
+        <a class="nav-link collapsed" href="userprofile.php">
           <i class="bi bi-person"></i>
           <span>Profile</span>
         </a>
       </li><!-- End Profile Page Nav -->
 
       <li class="nav-item">
-        <a class="nav-link collapsed" href="pages-faq.html">
-          <i class="bi bi-question-circle"></i>
-          <span>F.A.Q</span>
+        <a class="nav-link collapsed" href="index.html">
+          <i class="bi bi-person"></i>
+          <span>Home Page</span>
         </a>
-      </li><!-- End F.A.Q Page Nav -->
+      </li><!-- End Profile Page Nav -->
 
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="pages-contact.html">
-          <i class="bi bi-envelope"></i>
-          <span>Contact</span>
-        </a>
-      </li><!-- End Contact Page Nav -->
-
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="pages-register.html">
-          <i class="bi bi-card-list"></i>
-          <span>Register</span>
-        </a>
-      </li><!-- End Register Page Nav -->
-
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="pages-login.html">
-          <i class="bi bi-box-arrow-in-right"></i>
-          <span>Login</span>
-        </a>
-      </li><!-- End Login Page Nav -->
-
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="pages-error-404.html">
-          <i class="bi bi-dash-circle"></i>
-          <span>Error 404</span>
-        </a>
-      </li><!-- End Error 404 Page Nav -->
-
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="pages-blank.html">
-          <i class="bi bi-file-earmark"></i>
-          <span>Blank</span>
-        </a>
-      </li><!-- End Blank Page Nav -->
 
     </ul>
 
@@ -460,91 +212,91 @@
     <section class="section dashboard">
 
 
-        <div class="card-body">
-            <form class = "row g-3 needs-validation" method="post">
+      <div class="card-body">
+        <form class="row g-3 needs-validation" method="post">
 
-                    <div class="input-group mb-3">
-                      <input type="text" class="form-control" name="patient_SSN" placeholder="Patient SSN" aria-label="Patient SSN">
-                      <input type="text" class="form-control" name="drug-id" placeholder="Drug ID" aria-label="Drug ID">
-                      <span class="input-group-text">:</span>
-                      <input type="text" class="form-control" name="quantity" placeholder="Quantity" aria-label="Quantity">
-                      <span class="input-group-text">:</span>
-                      <input type="number" class="form-control" name="frequency" placeholder="Frequency" aria-label="Frequency">
-                    </div>
-
-                    <div class="col-12">
-                        <input type="submit" value="REQUEST" name="buy-drug" class="btn btn-primary">
-                    </div>
-              </form>
-        </div>
-
-        <?php
-        
-            if(isset($_POST["search-drug"])){
-      
-            $drug_name_search = $_POST["drug-name-search"];
-
-            $doctor_SSN = $user_data["SSN"];
-             
-            if($drug_name_search != ""){
-              $query = "SELECT * FROM patient_doctor_tbl JOIN patients ON patient_doctor_tbl.patient_SSN = patients.SSN WHERE doctor_SSN = '$doctor_SSN'";
-
-            }else {
-              $query = "SELECT * FROM patient_doctor_tbl JOIN patients ON patient_doctor_tbl.patient_SSN = patients.SSN WHERE doctor_SSN = '$doctor_SSN' AND patient_SSN = '$drug_name_search'";
-
-            }
-
-            //echo $business_id;
-
-            $result = $con->query($query);
-
-            if ($result->num_rows > 0) {
-                $sn=1;
-                while($data = $result->fetch_assoc()) {
-        ?>
-
-         <div class="card">
-            <div class="card-body">
-              <h5 class="card-title"> Patient Name : <?php echo $data["Fname"]." ". $data["Lname"]?></h5>
-              <h5 class="card-title"> Patient SSN : <?php echo $data["SSN"]?></h5>
-              <h5 class="card-title"> Patient Email : <?php echo $data["email"]?></h5>
-              <h5 class="card-title"> Address : <?php echo $data["address"]?></h5>
-            </div>
+          <div class="input-group mb-3">
+            <input type="text" class="form-control" name="patient_SSN" placeholder="Patient SSN" aria-label="Patient SSN">
+            <input type="text" class="form-control" name="drug-id" placeholder="Drug ID" aria-label="Drug ID">
+            <span class="input-group-text">:</span>
+            <input type="text" class="form-control" name="quantity" placeholder="Quantity" aria-label="Quantity">
+            <span class="input-group-text">:</span>
+            <input type="number" class="form-control" name="frequency" placeholder="Frequency" aria-label="Frequency">
           </div>
 
-        <?php
-        $sn++;}} else { ?>
-            <p> No such Patient Allocated to you </p>
-      <?php } }?>
+          <div class="col-12">
+            <input type="submit" value="REQUEST" name="buy-drug" class="btn btn-primary">
+          </div>
+        </form>
+      </div>
 
       <?php
-        //print_r($data);
 
-        $crud = new CRUD("localhost","root","123pass","drugdispensary");
+      if (isset($_POST["search-drug"])) {
 
-        if(isset($_POST["buy-drug"])) {
-            $drug_id = $_POST["drug-id"];
-            $company_id = $_POST["company-id"];
-            $quantity = $_POST["quantity"];
+        $drug_name_search = $_POST["drug-name-search"];
 
-            
-            $prescription_data = array(
-                'patient_SSN'=> $_POST['patient_SSN'],
-                'doctor_SSN' => $user_data['SSN'],
-                'drug_id' => $drug_id,
-                'quantity' => $_POST["quantity"],
-                'frequency' => $_POST["frequency"],
-              );
+        $doctor_SSN = $user_data["SSN"];
 
-              if ($crud->create('precriptions',$prescription_data)) {
-                  $mdg = "drug prescribed";   
-              }else {
-                  $msg = "prescribe drug";
-              }
-
+        if ($drug_name_search != "") {
+          $query = "SELECT * FROM patient_doctor_tbl JOIN patients ON patient_doctor_tbl.patient_SSN = patients.SSN WHERE doctor_SSN = '$doctor_SSN'";
+        } else {
+          $query = "SELECT * FROM patient_doctor_tbl JOIN patients ON patient_doctor_tbl.patient_SSN = patients.SSN WHERE doctor_SSN = '$doctor_SSN' AND patient_SSN = '$drug_name_search'";
         }
-        echo $msg;
-       ?>
+
+        //echo $business_id;
+
+        $result = $con->query($query);
+
+        if ($result->num_rows > 0) {
+          $sn = 1;
+          while ($data = $result->fetch_assoc()) {
+      ?>
+
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title"> Patient Name : <?php echo $data["Fname"] . " " . $data["Lname"] ?></h5>
+                <h5 class="card-title"> Patient SSN : <?php echo $data["SSN"] ?></h5>
+                <h5 class="card-title"> Patient Email : <?php echo $data["email"] ?></h5>
+                <h5 class="card-title"> Address : <?php echo $data["address"] ?></h5>
+              </div>
+            </div>
+
+          <?php
+            $sn++;
+          }
+        } else { ?>
+          <p> No such Patient Allocated to you </p>
+      <?php }
+      } ?>
+
+      <?php
+      //print_r($data);
+
+      $crud = new CRUD("localhost", "root", "123pass", "drugdispensary");
+
+      if (isset($_POST["buy-drug"])) {
+        $drug_id = $_POST["drug-id"];
+        $company_id = $_POST["company-id"];
+        $quantity = $_POST["quantity"];
+
+
+        $prescription_data = array(
+          'patient_SSN' => $_POST['patient_SSN'],
+          'doctor_SSN' => $user_data['SSN'],
+          'drug_id' => $drug_id,
+          'quantity' => $_POST["quantity"],
+          'frequency' => $_POST["frequency"],
+        );
+
+        if ($crud->create('precriptions', $prescription_data)) {
+          $mdg = "drug prescribed";
+        } else {
+          $msg = "prescribe drug";
+        }
+      }
+      echo $msg;
+      ?>
 
 
 
@@ -555,7 +307,7 @@
 
   <!-- ======= Footer ======= -->
   <footer id="footer" class="footer">
-  
+
   </footer><!-- End Footer -->
 
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>

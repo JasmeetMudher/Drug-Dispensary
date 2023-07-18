@@ -22,7 +22,7 @@ $user_data = check_login($con);
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>Dashboard - NiceAdmin Bootstrap Template</title>
+    <title>Admin Dashboard</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
 
@@ -153,7 +153,7 @@ $user_data = check_login($con);
         <ul class="sidebar-nav" id="sidebar-nav">
 
             <li class="nav-item">
-                <a class="nav-link " href="/patient-dashboard.php">
+                <a class="nav-link " href="/admin-dashboard.php">
                     <i class="bi bi-grid"></i>
                     <span>Dashboard</span>
                 </a>
@@ -161,40 +161,59 @@ $user_data = check_login($con);
 
             <li class="nav-item">
                 <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
-                    <i class="bi bi-menu-button-wide"></i><span>Doctor</span><i class="bi bi-chevron-down ms-auto"></i>
+                    <i class="bi bi-menu-button-wide"></i><span>Doctors</span><i class="bi bi-chevron-down ms-auto"></i>
                 </a>
                 <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                     <li>
-                        <a href="/patient-get-doctor.php">
-                            <i class="bi bi-circle"></i><span>Get Doctor</span>
+                        <a href="/admin-view-doctors.php">
+                            <i class="bi bi-circle"></i><span>View Doctors</span>
                         </a>
                     </li>
-                    <li>
-                        <a href="components-accordion.html">
-                            <i class="bi bi-circle"></i><span>Book Appointment</span>
-                        </a>
-                    </li>
+
                 </ul>
             </li><!-- End Components Nav -->
 
             <li class="nav-item">
-                <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
-                    <i class="bi bi-journal-text"></i><span>Prescriptions</span><i class="bi bi-chevron-down ms-auto"></i>
+                <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
+                    <i class="bi bi-menu-button-wide"></i><span>Patients</span><i class="bi bi-chevron-down ms-auto"></i>
                 </a>
-                <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                     <li>
-                        <a href="/patient-view-prescriptions.php">
-                            <i class="bi bi-circle"></i><span>View Prescriptions</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/patient-view-drugs.php">
-                            <i class="bi bi-circle"></i><span>Current Drugs</span>
+                        <a href="/admin-view-patients.php">
+                            <i class="bi bi-circle"></i><span>View Patients</span>
                         </a>
                     </li>
 
                 </ul>
-            </li><!-- End Forms Nav -->
+            </li><!-- End Components Nav -->
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
+                    <i class="bi bi-menu-button-wide"></i><span>Pharmacists</span><i class="bi bi-chevron-down ms-auto"></i>
+                </a>
+                <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                    <li>
+                        <a href="/admin-view-pharmacy.php">
+                            <i class="bi bi-circle"></i><span>View Pharmacists</span>
+                        </a>
+                    </li>
+
+                </ul>
+            </li><!-- End Components Nav -->
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
+                    <i class="bi bi-menu-button-wide"></i><span>Company</span><i class="bi bi-chevron-down ms-auto"></i>
+                </a>
+                <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                    <li>
+                        <a href="/admin-view-pharmacy.php">
+                            <i class="bi bi-circle"></i><span>View Companies</span>
+                        </a>
+                    </li>
+
+                </ul>
+            </li><!-- End Components Nav -->
 
            <!-- End Icons Nav -->
 
@@ -225,6 +244,9 @@ $user_data = check_login($con);
         </div><!-- End Page Title -->
 
         <section class="section dashboard">
+
+            <h5> Patients </h5>
+
             <?php
 
             if ($_SESSION['user-level']) {
@@ -234,17 +256,17 @@ $user_data = check_login($con);
             }
 
             $business_id = $user_data["SSN"];
-            $users_query = "SELECT * FROM precriptions JOIN pharmacy_drugs ON precriptions.drug_id = pharmacy_drugs.drug_id WHERE patient_SSN = '$business_id'";
+            $users_query = "SELECT * FROM patients";
 
             $result = $con->query($users_query);
             ?>
             <table border="1" cellspacing="0" cellpadding="10">
                 <tr>
-                    <th>Prescription ID</th>
-                    <th>Drug Name </th>
-                    <th>Drug ID</th>
-                    <th>Quantity </th>
-                    <th>Frequency </th>
+                    <th>SSN</th>
+                    <th>Name </th>
+                    <th>Phone</th>
+                    <th>Email </th>
+                    <th>Address </th>
                 </tr>
                 <?php
                 if ($result->num_rows > 0) {
@@ -252,11 +274,11 @@ $user_data = check_login($con);
                     while ($data = $result->fetch_assoc()) {
                 ?>
                         <tr>
-                            <td><?php echo $data["Prescription_ID"]; ?> </td>
-                            <td><?php echo $data["drug_name"]; ?> </td>
-                            <td><?php echo $data["drug_id"]; ?> </td>
-                            <td><?php echo $data['prescription_quantity']; ?> </td>
-                            <td><?php echo $data['frequency']; ?> </td>
+                            <td><?php echo $data["SSN"]; ?> </td>
+                            <td><?php echo $data["Fname"]." ".$data["Lname"]; ?> </td>
+                            <td><?php echo $data["dob"]; ?> </td>
+                            <td><?php echo $data['email']; ?> </td>
+                            <td><?php echo $data['address']; ?> </td>
                         <tr>
                         <?php
                         $sn++;
@@ -272,6 +294,160 @@ $user_data = check_login($con);
                     print_r($data);
                     ?>
             </table>
+
+
+            
+            <h5> Doctors </h5>
+
+            <?php
+
+            if ($_SESSION['user-level']) {
+                $table_name = $_SESSION['usertype'];
+            } else {
+                $table_name = $usertype . "s";
+            }
+
+            $business_id = $user_data["SSN"];
+            $users_query = "SELECT * FROM doctors";
+
+            $result = $con->query($users_query);
+            ?>
+            <table border="1" cellspacing="0" cellpadding="10">
+                <tr>
+                    <th>SSN</th>
+                    <th>Name </th>
+                    <th>Phone</th>
+                    <th>Email </th>
+                    <th>Address </th>
+                </tr>
+                <?php
+                if ($result->num_rows > 0) {
+                    $sn = 1;
+                    while ($data = $result->fetch_assoc()) {
+                ?>
+                        <tr>
+                            <td><?php echo $data["SSN"]; ?> </td>
+                            <td><?php echo $data["Fname"]." ".$data["Lname"]; ?> </td>
+                            <td><?php echo $data["dob"]; ?> </td>
+                            <td><?php echo $data['email']; ?> </td>
+                            <td><?php echo $data['address']; ?> </td>
+                        <tr>
+                        <?php
+                        $sn++;
+                    }
+                } else { ?>
+                        <tr>
+                            <td colspan="8">No data found</td>
+                        </tr>
+
+                    <?php } ?>
+
+                    <?php
+                    print_r($data);
+                    ?>
+            </table>
+
+
+            <h5> Pharmacies </h5>
+
+            <?php
+
+            if ($_SESSION['user-level']) {
+                $table_name = $_SESSION['usertype'];
+            } else {
+                $table_name = $usertype . "s";
+            }
+
+            $business_id = $user_data["SSN"];
+            $users_query = "SELECT * FROM pharmacy";
+
+            $result = $con->query($users_query);
+            ?>
+            <table border="1" cellspacing="0" cellpadding="10">
+                <tr>
+                    <th>Business ID</th>
+                    <th>Name </th>
+                    <th>Phone</th>
+                    <th>Email </th>
+                    <th>Address </th>
+                </tr>
+                <?php
+                if ($result->num_rows > 0) {
+                    $sn = 1;
+                    while ($data = $result->fetch_assoc()) {
+                ?>
+                        <tr>
+                            <td><?php echo $data["business_id"]; ?> </td>
+                            <td><?php echo $data["name"]; ?> </td>
+                            <td><?php echo $data["phone"]; ?> </td>
+                            <td><?php echo $data['email']; ?> </td>
+                            <td><?php echo $data['address']; ?> </td>
+                        <tr>
+                        <?php
+                        $sn++;
+                    }
+                } else { ?>
+                        <tr>
+                            <td colspan="8">No data found</td>
+                        </tr>
+
+                    <?php } ?>
+
+                    <?php
+                    print_r($data);
+                    ?>
+            </table>
+
+            <h5> Pharmaceutical Companys </h5>
+
+            <?php
+
+            if ($_SESSION['user-level']) {
+                $table_name = $_SESSION['usertype'];
+            } else {
+                $table_name = $usertype . "s";
+            }
+
+            $business_id = $user_data["SSN"];
+            $users_query = "SELECT * FROM pharmaceutical_company";
+
+            $result = $con->query($users_query);
+            ?>
+            <table border="1" cellspacing="0" cellpadding="10">
+                <tr>
+                    <th>Business ID</th>
+                    <th>Name </th>
+                    <th>Phone</th>
+                    <th>Email </th>
+                    <th>Address </th>
+                </tr>
+                <?php
+                if ($result->num_rows > 0) {
+                    $sn = 1;
+                    while ($data = $result->fetch_assoc()) {
+                ?>
+                        <tr>
+                            <td><?php echo $data["business_id"]; ?> </td>
+                            <td><?php echo $data["name"]; ?> </td>
+                            <td><?php echo $data["phone"]; ?> </td>
+                            <td><?php echo $data['email']; ?> </td>
+                            <td><?php echo $data['address']; ?> </td>
+                        <tr>
+                        <?php
+                        $sn++;
+                    }
+                } else { ?>
+                        <tr>
+                            <td colspan="8">No data found</td>
+                        </tr>
+
+                    <?php } ?>
+
+                    <?php
+                    print_r($data);
+                    ?>
+            </table>
+
         </section>
 
     </main><!-- End #main -->

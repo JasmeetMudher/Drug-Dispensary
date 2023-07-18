@@ -188,7 +188,7 @@ $user_data = check_login($con);
                         </a>
                     </li>
                     <li>
-                        <a href="/patient-view-drugs.php">
+                        <a href="/patients-view-drugs.php">
                             <i class="bi bi-circle"></i><span>Current Drugs</span>
                         </a>
                     </li>
@@ -234,17 +234,17 @@ $user_data = check_login($con);
             }
 
             $business_id = $user_data["SSN"];
-            $users_query = "SELECT * FROM precriptions JOIN pharmacy_drugs ON precriptions.drug_id = pharmacy_drugs.drug_id WHERE patient_SSN = '$business_id'";
+            $users_query = "SELECT * FROM dispensed_prescriptions JOIN pharmacy_drugs ON dispensed_prescriptions.drug_ID = pharmacy_drugs.drug_id WHERE patient_SSN = '$business_id'";
 
             $result = $con->query($users_query);
             ?>
             <table border="1" cellspacing="0" cellpadding="10">
                 <tr>
-                    <th>Prescription ID</th>
+                    <th>Dispense ID</th>
                     <th>Drug Name </th>
                     <th>Drug ID</th>
-                    <th>Quantity </th>
-                    <th>Frequency </th>
+                    <th>Doctor SSN </th>
+                    <th>Cost </th>
                 </tr>
                 <?php
                 if ($result->num_rows > 0) {
@@ -252,11 +252,11 @@ $user_data = check_login($con);
                     while ($data = $result->fetch_assoc()) {
                 ?>
                         <tr>
-                            <td><?php echo $data["Prescription_ID"]; ?> </td>
+                            <td><?php echo $data["ID"]; ?> </td>
                             <td><?php echo $data["drug_name"]; ?> </td>
                             <td><?php echo $data["drug_id"]; ?> </td>
-                            <td><?php echo $data['prescription_quantity']; ?> </td>
-                            <td><?php echo $data['frequency']; ?> </td>
+                            <td><?php echo $data['doctor_SSN']; ?> </td>
+                            <td><?php echo $data['cost']; ?> </td>
                         <tr>
                         <?php
                         $sn++;
