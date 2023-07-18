@@ -153,7 +153,7 @@ $user_data = check_login($con);
         <ul class="sidebar-nav" id="sidebar-nav">
 
             <li class="nav-item">
-                <a class="nav-link " href="index.html">
+                <a class="nav-link " href="/patient-dashboard.php">
                     <i class="bi bi-grid"></i>
                     <span>Dashboard</span>
                 </a>
