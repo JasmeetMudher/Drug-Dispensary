@@ -13,12 +13,13 @@
 
     $con->query($login_query);
     // Array to store the results
-    $results = $con->query($quantity_query)->fetch_assoc();
+    $results = $con->query($login_query)->fetch_assoc();
 
     if($results){
         $_SESSION['ID'] = $results['ID'];
         $_SESSION['Name'] = $results["Fname"]." ".$results["Lname"];
-        $_SESSION['usertype'] = "Admin";
+        $_SESSION['usertype'] = "admin";
+        header("Location: admin-dashboard.php ");
     }else {
         $msg = "No Such User";
     }

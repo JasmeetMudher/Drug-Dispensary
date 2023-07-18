@@ -31,7 +31,12 @@ if(isset($_POST["btnsubmit"])){
     if($crud->create($user_type , $patient_data)){
         $_SESSION['usertype'] = $user_type;
         $msg = "<div class='btn btn-success'>records inserted successfully</div>";
-        header("location: dashboard.php");
+        if($user_type == 'admins'){
+          header("location: admin-dashboard.php");
+        }else {
+          header("location: dashboard.php");
+        }
+
     }else{
         die("Error in creating patient");
     }

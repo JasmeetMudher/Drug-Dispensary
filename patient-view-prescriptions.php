@@ -188,7 +188,7 @@ $user_data = check_login($con);
                         </a>
                     </li>
                     <li>
-                        <a href="/patient-view-drugs.php">
+                        <a href="/patients-view-drugs.php">
                             <i class="bi bi-circle"></i><span>Current Drugs</span>
                         </a>
                     </li>
