@@ -464,34 +464,20 @@
             <form class = "row g-3 needs-validation" method="post">
 
                     <div class="input-group mb-3">
-                      <input type="text" class="form-control" name="drug-id" placeholder="Drug ID" aria-label="Username">
-                      <span class="input-group-text">:</span>
-                      <input type="text" class="form-control" name="company-id" placeholder="Company ID" aria-label="Server">
-                      <span class="input-group-text">:</span>
-                      <input type="number" class="form-control" name="quantity" placeholder="Company ID" aria-label="Server">
+                      <input type="text" class="form-control" name="prescription-id" placeholder="Prescription ID" aria-label="Username">
                     </div>
 
                     <div class="col-12">
-                        <input type="submit" value="REQUEST" name="buy-drug" class="btn btn-primary">
+                        <input type="submit" value="DISPENSE" name="buy-drug" class="btn btn-primary">
                     </div>
               </form>
         </div>
 
         <?php
         
-            if(isset($_POST["search-drug"])){
-      
-            $drug_name_search = $_POST["drug-name-search"];
-
             $business_id = $user_data["business_id"];
              
-            if($drug_name_search != ""){
-              $query = "SELECT * FROM contracts JOIN company_drugs ON contracts.company_id = company_drugs.businesss_id WHERE pharmacy_id = '$business_id' AND drug_name = '$drug_name_search' ";
-
-            }else {
-              $query = "SELECT * FROM contracts JOIN company_drugs ON contracts.company_id = company_drugs.businesss_id WHERE pharmacy_id = '$business_id'";
-
-            }
+            $query = "SELECT * FROM precriptions JOIN pharmacy_drugs ON precriptions.drug_id = pharmacy_drugs.drug_id WHERE businesss_id = '$business_id'";
 
             //echo $business_id;
 
@@ -507,9 +493,10 @@
               <h5 class="card-title"> Drug Name : <?php echo $data["drug_name"]?></h5>
               <h5 class="card-title"> Drug ID : <?php echo $data["drug_id"]?></h5>
               <h5 class="card-title"> Drug Formula : <?php echo $data["drug_formula"]?></h5>
-              <h5 class="card-title"> Quantity Remaining : <?php echo $data["quantity"]?></h5>
+              <h5 class="card-title"> Patient SSN : <?php echo $data["patient_SSN"]?></h5>
               <h5 class="card-title"> Price Per Unit : <?php echo $data["price_per_unit"]?></h5>
-              <h6 class="card-subtitle mb-2 text-muted"> Company ID : <?php echo $data["company_id"] ?> </h6>
+              <h5 class="card-title"> Quantity : <?php echo $data["quantity"]?></h5>
+              <h6 class="card-subtitle mb-2 text-muted"> Prescription ID : <?php echo $data["Prescription_ID"] ?> </h6>
 
             </div>
           </div>
@@ -517,7 +504,7 @@
         <?php
         $sn++;}} else { ?>
             <p> No Such Drug </p>
-      <?php } }?>
+      <?php } ?>
 
       <?php
         //print_r($data);
@@ -525,33 +512,36 @@
         $crud = new CRUD("localhost","root","123pass","drugdispensary");
 
         if(isset($_POST["buy-drug"])) {
-            $drug_id = $_POST["drug-id"];
-            $company_id = $_POST["company-id"];
-            $quantity = $_POST["quantity"];
+            $prescription_id = $_POST["prescription-id"];
 
-            $quantity_query = "SELECT * FROM company_drugs WHERE drug_id = '$drug_id' AND businesss_id = '$company_id' LIMIT 1";
+            $quantity_query = "SELECT * FROM precriptions WHERE Prescription_ID = '$prescription_id'";
             
-            $quantity_data = $con->query($quantity_query)->fetch_assoc();
+            $prescription_data = $con->query($quantity_query)->fetch_assoc();
 
-            if($quantity > $quantity_data["quantity"]){
+            $drug_id = $prescription_data['drug_id'];
+
+            $pharmacy_drugs_query = "SELECT * FROM pharmacy_drugs WHERE drug_id ='$drug_id' ";
+
+            $pharmacy_drugs_data = $con->query($pharmacy_drugs_query)->fetch_assoc();
+
+            if($prescription_data["quantity"] > $pharmacy_drugs_data["quantity"]){
                 echo "Reduce The Quantity Wanted ";
             }else {
 
-                $company_quantity = (int)$quantity_data["quantity"]-(int)$quantity;
+                $rem_quantity = (int)$pharmacy_drugs_data["quantity"]-(int)$prescription_data["quantity"];
 
-                $update_query = "UPDATE company_drugs SET quantity = '$company_quantity' WHERE drug_id = '$drug_id' ";
+                $update_query = "UPDATE pharmacy_drugs SET quantity = '$rem_quantity' WHERE drug_id = '$drug_id' ";
 
                 $updated_drug_data = array(
-                  'drug_id' => $drug_id,
-                  'businesss_id' => $user_data['business_id'],
-                  'drug_formula' => $quantity_data["drug_formula"],
-                  'drug_name' => $quantity_data["drug_name"],
-                  'quantity' => $quantity,
-                  'price_per_unit' =>  $quantity_data["price_per_unit"] 
+                  'pharmacy_id' => $user_data['business_id'],
+                  'doctor_SSN' => $prescription_data["doctor_SSN"],
+                  'patient_SSN' => $prescription_data["patient_SSN"],
+                  'drug_ID' => $prescription_data["drug_id"],
+                  'cost' =>  (int)$pharmacy_drugs_data["price_per_unit"]*(int)$prescription_data["quantity"]
                 );
 
                 if($con->query($update_query)){
-                    if ($crud->create('pharmacy_drugs',$updated_drug_data)) {
+                    if ($crud->create('dispensed_prescriptions',$updated_drug_data)) {
                         header("Location: /pharmacy-view-drugs.php ");   
                     }else {
                         $msg = "couldn't add drug";

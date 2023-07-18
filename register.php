@@ -29,6 +29,7 @@ if(isset($_POST["btnsubmit"])){
     $user_type = $_POST["user-type"];
 
     if($crud->create($user_type , $patient_data)){
+        $_SESSION['usertype'] = $user_type;
         $msg = "<div class='btn btn-success'>records inserted successfully</div>";
         header("location: dashboard.php");
     }else{
@@ -143,6 +144,12 @@ if(isset($_POST["btnsubmit"])){
                                 <input class="form-check-input" type="radio" name="user-type" id="gridRadios2" value="doctors">
                                 <label class="form-check-label" for="gridRadios2">
                                     Doctor
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="user-type" id="gridRadios2" value="admins">
+                                <label class="form-check-label" for="gridRadios2">
+                                    Admin
                                 </label>
                             </div>
                         </div>

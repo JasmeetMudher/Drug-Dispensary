@@ -1,7 +1,7 @@
 <?php
 
   include("connection.php");
-  include("business-functions.php");
+  include("functions.php");
   include("crud.php");
 
   session_start();

@@ -1,7 +1,7 @@
 <?php
 
   include("connection.php");
-  include("business-functions.php");
+  include("functions.php");
   include("crud.php");
 
   session_start();
@@ -24,7 +24,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Get Contract</title>
+  <title>Doctor Search</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -448,11 +448,11 @@
   <main id="main" class="main">
 
     <div class="pagetitle">
-      <h1>Get Contract</h1>
+      <h1>Give Prescription</h1>
       <nav>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-          <li class="breadcrumb-item active">Get Contract</li>
+          <li class="breadcrumb-item"><a href="/doctor-dashboard.php">Doctor</a></li>
+          <li class="breadcrumb-item active">Give Prescription</li>
         </ol>
       </nav>
     </div><!-- End Page Title -->
@@ -464,11 +464,12 @@
             <form class = "row g-3 needs-validation" method="post">
 
                     <div class="input-group mb-3">
-                      <input type="text" class="form-control" name="drug-id" placeholder="Drug ID" aria-label="Username">
+                      <input type="text" class="form-control" name="patient_SSN" placeholder="Patient SSN" aria-label="Patient SSN">
+                      <input type="text" class="form-control" name="drug-id" placeholder="Drug ID" aria-label="Drug ID">
                       <span class="input-group-text">:</span>
-                      <input type="text" class="form-control" name="company-id" placeholder="Company ID" aria-label="Server">
+                      <input type="text" class="form-control" name="quantity" placeholder="Quantity" aria-label="Quantity">
                       <span class="input-group-text">:</span>
-                      <input type="number" class="form-control" name="quantity" placeholder="Company ID" aria-label="Server">
+                      <input type="number" class="form-control" name="frequency" placeholder="Frequency" aria-label="Frequency">
                     </div>
 
                     <div class="col-12">
@@ -483,13 +484,13 @@
       
             $drug_name_search = $_POST["drug-name-search"];
 
-            $business_id = $user_data["business_id"];
+            $doctor_SSN = $user_data["SSN"];
              
             if($drug_name_search != ""){
-              $query = "SELECT * FROM contracts JOIN company_drugs ON contracts.company_id = company_drugs.businesss_id WHERE pharmacy_id = '$business_id' AND drug_name = '$drug_name_search' ";
+              $query = "SELECT * FROM patient_doctor_tbl JOIN patients ON patient_doctor_tbl.patient_SSN = patients.SSN WHERE doctor_SSN = '$doctor_SSN'";
 
             }else {
-              $query = "SELECT * FROM contracts JOIN company_drugs ON contracts.company_id = company_drugs.businesss_id WHERE pharmacy_id = '$business_id'";
+              $query = "SELECT * FROM patient_doctor_tbl JOIN patients ON patient_doctor_tbl.patient_SSN = patients.SSN WHERE doctor_SSN = '$doctor_SSN' AND patient_SSN = '$drug_name_search'";
 
             }
 
@@ -504,19 +505,16 @@
 
          <div class="card">
             <div class="card-body">
-              <h5 class="card-title"> Drug Name : <?php echo $data["drug_name"]?></h5>
-              <h5 class="card-title"> Drug ID : <?php echo $data["drug_id"]?></h5>
-              <h5 class="card-title"> Drug Formula : <?php echo $data["drug_formula"]?></h5>
-              <h5 class="card-title"> Quantity Remaining : <?php echo $data["quantity"]?></h5>
-              <h5 class="card-title"> Price Per Unit : <?php echo $data["price_per_unit"]?></h5>
-              <h6 class="card-subtitle mb-2 text-muted"> Company ID : <?php echo $data["company_id"] ?> </h6>
-
+              <h5 class="card-title"> Patient Name : <?php echo $data["Fname"]." ". $data["Lname"]?></h5>
+              <h5 class="card-title"> Patient SSN : <?php echo $data["SSN"]?></h5>
+              <h5 class="card-title"> Patient Email : <?php echo $data["email"]?></h5>
+              <h5 class="card-title"> Address : <?php echo $data["address"]?></h5>
             </div>
           </div>
 
         <?php
         $sn++;}} else { ?>
-            <p> No Such Drug </p>
+            <p> No such Patient Allocated to you </p>
       <?php } }?>
 
       <?php
@@ -529,37 +527,20 @@
             $company_id = $_POST["company-id"];
             $quantity = $_POST["quantity"];
 
-            $quantity_query = "SELECT * FROM company_drugs WHERE drug_id = '$drug_id' AND businesss_id = '$company_id' LIMIT 1";
             
-            $quantity_data = $con->query($quantity_query)->fetch_assoc();
+            $prescription_data = array(
+                'patient_SSN'=> $_POST['patient_SSN'],
+                'doctor_SSN' => $user_data['SSN'],
+                'drug_id' => $drug_id,
+                'quantity' => $_POST["quantity"],
+                'frequency' => $_POST["frequency"],
+              );
 
-            if($quantity > $quantity_data["quantity"]){
-                echo "Reduce The Quantity Wanted ";
-            }else {
-
-                $company_quantity = (int)$quantity_data["quantity"]-(int)$quantity;
-
-                $update_query = "UPDATE company_drugs SET quantity = '$company_quantity' WHERE drug_id = '$drug_id' ";
-
-                $updated_drug_data = array(
-                  'drug_id' => $drug_id,
-                  'businesss_id' => $user_data['business_id'],
-                  'drug_formula' => $quantity_data["drug_formula"],
-                  'drug_name' => $quantity_data["drug_name"],
-                  'quantity' => $quantity,
-                  'price_per_unit' =>  $quantity_data["price_per_unit"] 
-                );
-
-                if($con->query($update_query)){
-                    if ($crud->create('pharmacy_drugs',$updated_drug_data)) {
-                        header("Location: /pharmacy-view-drugs.php ");   
-                    }else {
-                        $msg = "couldn't add drug";
-                    }
-                }else{
-                    $msg = "failed";
-                }
-            }
+              if ($crud->create('precriptions',$prescription_data)) {
+                  $mdg = "drug prescribed";   
+              }else {
+                  $msg = "prescribe drug";
+              }
 
         }
         echo $msg;
@@ -573,7 +554,7 @@
   </main><!-- End #main -->
 
   <!-- ======= Footer ======= -->
-  <footer id="footer" class="footer"><
+  <footer id="footer" class="footer">
   
   </footer><!-- End Footer -->
 

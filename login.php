@@ -28,7 +28,7 @@
       $_SESSION['ID'] = $results[0][0]['ID'];
       $_SESSION['Name'] = $results[0][0]["Fname"]." ".$results[0][0]["Lname"];
       $_SESSION['usertype'] = "doctor";
-      header("Location: dashboard.php");
+      header("Location: doctor-dashboard.php");
 
       echo "doctor logic works";
 
@@ -37,7 +37,7 @@
       $_SESSION['ID'] = $results[1][0]['ID'];
       $_SESSION['Name'] = $results[1][0]["Fname"]." ".$results[1][0]["Lname"];
       $_SESSION['usertype'] = "patient";
-      header("Location: dashboard.php");
+      header("Location: patient-dashboard.php");
 
       echo "patient logic works";
     }else {

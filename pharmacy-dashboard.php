@@ -339,8 +339,8 @@
         </a>
         <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <li>
-            <a href="tables-general.html">
-              <i class="bi bi-circle"></i><span>General Tables</span>
+            <a href="/pharmacy-dispense-drug.php">
+              <i class="bi bi-circle"></i><span>Dispense Drugs</span>
             </a>
           </li>
           <li>
