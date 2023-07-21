@@ -24,7 +24,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Get Contract</title>
+  <title> Dispensed Prescriptions </title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -194,8 +194,8 @@
         </a>
       </li>
       <li>
-        <a href="/pharmacy-view-dispensed.php">
-          <i class="bi bi-circle"></i><span>Dispensed Drugs</span>
+        <a href="tables-data.html">
+          <i class="bi bi-circle"></i><span>Data Tables</span>
         </a>
       </li>
     </ul>
@@ -245,25 +245,11 @@
 
     <section class="section dashboard">
 
-
-        <div class="card-body">
-            <form class = "row g-3 needs-validation" method="post">
-
-                    <div class="input-group mb-3">
-                      <input type="text" class="form-control" name="prescription-id" placeholder="Prescription ID" aria-label="Username">
-                    </div>
-
-                    <div class="col-12">
-                        <input type="submit" value="DISPENSE" name="buy-drug" class="btn btn-primary">
-                    </div>
-              </form>
-        </div>
-
         <?php
         
             $business_id = $user_data["business_id"];
              
-            $query = "SELECT * FROM precriptions JOIN pharmacy_drugs ON precriptions.drug_id = pharmacy_drugs.drug_id WHERE businesss_id = '$business_id'";
+            $query = "SELECT * FROM dispensed_prescriptions JOIN pharmacy_drugs ON dispensed_prescriptions.drug_id = pharmacy_drugs.drug_id WHERE businesss_id = '$business_id'";
 
             //echo $business_id;
 
@@ -280,9 +266,9 @@
               <h5 class="card-title"> Drug ID : <?php echo $data["drug_id"]?></h5>
               <h5 class="card-title"> Drug Formula : <?php echo $data["drug_formula"]?></h5>
               <h5 class="card-title"> Patient SSN : <?php echo $data["patient_SSN"]?></h5>
-              <h5 class="card-title"> Price Per Unit : <?php echo $data["price_per_unit"]?></h5>
-              <h5 class="card-title"> Quantity : <?php echo $data["prescription_quantity"]?></h5>
-              <h6 class="card-subtitle mb-2 text-muted"> Prescription ID : <?php echo $data["Prescription_ID"] ?> </h6>
+              <h5 class="card-title"> Quantity : <?php echo $data["quantity"]?></h5>
+              <h5 class="card-title"> Cost : <?php echo $data["cost"]?></h5>
+              <h6 class="card-subtitle mb-2 text-muted"> Dispense ID : <?php echo $data["ID"] ?> </h6>
 
             </div>
           </div>
