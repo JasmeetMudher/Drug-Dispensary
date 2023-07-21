@@ -53,6 +53,20 @@
     }
 
 
+    if(isset($_POST["btn-update-drug"])) {
+      $drug_id = $_POST["drug-id"];
+      $drug_name = $_POST["drug-name"];
+
+      $update_query = "UPDATE company_drugs SET drug_name = '$drug_name' WHERE drug_id = '$drug_id' ";
+
+      if($con->query($update_query)){
+          echo '<p> Updated </p>';
+      }else{
+          echo '<p> Error </p>';
+      }
+
+    }
+ 
 
 ?>
 
@@ -371,33 +385,51 @@
 
                 <div class="tab-pane fade pt-3" id="profile-change-password">
                   <!-- Change Password Form -->
-                  <form>
-
+                  <form method="post">
+ 
                     <div class="row mb-3">
-                      <label for="currentPassword" class="col-md-4 col-lg-3 col-form-label">Current Password</label>
+                      <label for="fullName" class="col-md-4 col-lg-3 col-form-label"> DRUG ID</label>
                       <div class="col-md-8 col-lg-9">
-                        <input name="password" type="password" class="form-control" id="currentPassword">
+                        <input name="drug-id" type="text" class="form-control" id="fullName">
                       </div>
                     </div>
 
                     <div class="row mb-3">
-                      <label for="newPassword" class="col-md-4 col-lg-3 col-form-label">New Password</label>
+                      <label for="fullName" class="col-md-4 col-lg-3 col-form-label">DRUG FORMULA</label>
                       <div class="col-md-8 col-lg-9">
-                        <input name="newpassword" type="password" class="form-control" id="newPassword">
+                        <input name="drug-formula" type="text" class="form-control" id="fullName" >
                       </div>
                     </div>
 
                     <div class="row mb-3">
-                      <label for="renewPassword" class="col-md-4 col-lg-3 col-form-label">Re-enter New Password</label>
+                      <label for="fullName" class="col-md-4 col-lg-3 col-form-label">DRUG NAME</label>
                       <div class="col-md-8 col-lg-9">
-                        <input name="renewpassword" type="password" class="form-control" id="renewPassword">
+                        <input name="drug-name" type="text" class="form-control" id="fullName" >
                       </div>
                     </div>
+
+                    <div class="row mb-3">
+                      <label for="fullName" class="col-md-4 col-lg-3 col-form-label">QUANTITY</label>
+                      <div class="col-md-8 col-lg-9">
+                        <input name="quantity" type="text" class="form-control" id="fullName"  ">
+                      </div>
+                    </div>
+
+
+                    <div class="row mb-3">
+                      <label for="fullName" class="col-md-4 col-lg-3 col-form-label">PRICE PER UNIT</label>
+                      <div class="col-md-8 col-lg-9">
+                        <input name="price_per_unit" type="text" class="form-control" id="fullName"  ">
+                      </div>
+                    </div>
+
 
                     <div class="text-center">
-                      <button type="submit" class="btn btn-primary">Change Password</button>
+                      <button type="submit" class="btn btn-primary" name="btn-update-drug">ADD</button>
                     </div>
-                  </form><!-- End Change Password Form -->
+
+                  </form><!-- End Profile Edit Form -->
+
 
                 </div>
 
@@ -415,14 +447,14 @@
   <!-- ======= Footer ======= -->
   <footer id="footer" class="footer">
     <div class="copyright">
-      &copy; Copyright <strong><span>NiceAdmin</span></strong>. All Rights Reserved
+      &copy; Copyright <strong><span>Winstone Were and Jasmeet Mudher</span></strong>. All Rights Reserved
     </div>
     <div class="credits">
       <!-- All the links in the footer should remain intact. -->
       <!-- You can delete the links only if you purchased the pro version. -->
       <!-- Licensing information: https://bootstrapmade.com/license/ -->
       <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
-      Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+      Designed by <a href="https://bootstrapmade.com/">Jasmeet Mudher </a>
     </div>
   </footer><!-- End Footer -->
 
