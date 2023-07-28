@@ -2,6 +2,7 @@
 
   include("connection.php");
   include("business-functions.php");
+  include("crud.php");
 
   session_start();
 
@@ -13,7 +14,6 @@
  
   $user_data = check_login($con);
 
-
 ?>
 
 
@@ -22,9 +22,9 @@
 
 <head>
   <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewpo  rt">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Pharmacy Dashboard</title>
+  <title>Get Contract</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -59,8 +59,7 @@
 
 <body>
 
-  <!-- ======= Header ======= -->
-  <header id="header" class="header fixed-top d-flex align-items-center">
+<header id="header" class="header fixed-top d-flex align-items-center">
 
     <div class="d-flex align-items-center justify-content-between">
       <a href="index.html" class="logo d-flex align-items-center">
@@ -72,8 +71,8 @@
 
     <div class="search-bar">
       <form class="search-form d-flex align-items-center" method="POST" action="#">
-        <input type="text" name="query" placeholder="Search" title="Enter search keyword">
-        <button type="submit" title="Search"><i class="bi bi-search"></i></button>
+        <input type="text" name="drug-name-search" placeholder="Search" title="Enter search keyword">
+        <button type="submit" name="search-drug" title="Search"><i class="bi bi-search"></i></button>
       </form>
     </div><!-- End Search Bar -->
 
@@ -227,14 +226,6 @@
         </a>
       </li><!-- End Profile Page Nav -->
 
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="index.html">
-          <i class="bi bi-person"></i>
-          <span>Home Page</span>
-        </a>
-      </li><!-- End Profile Page Nav -->
-
-
     </ul>
 
   </aside><!-- End Sidebar-->
@@ -242,72 +233,132 @@
   <main id="main" class="main">
 
     <div class="pagetitle">
-      <h1>Dashboard</h1>
+      <h1>Get Contract</h1>
       <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-          <li class="breadcrumb-item active">Dashboard</li>
+          <li class="breadcrumb-item active">Get Contract</li>
         </ol>
       </nav>
     </div><!-- End Page Title -->
 
     <section class="section dashboard">
-      <?php  
 
-        if($_SESSION['user-level']){
-          $table_name = $_SESSION['usertype'];
-        }else {
-          $table_name = $usertype."s";
-        }
 
-          $business_id = $user_data["business_id"];
-          $users_query = "SELECT * FROM precriptions JOIN pharmacy_drugs ON precriptions.drug_id = pharmacy_drugs.drug_id WHERE businesss_id = '$business_id'";
+        <div class="card-body">
+            <form class = "row g-3 needs-validation" method="post">
+
+                    <div class="input-group mb-3">
+                      <input type="text" class="form-control" name="drug-id" placeholder="Drug ID" aria-label="Username">
+                      <span class="input-group-text">:</span>
+                      <input type="text" class="form-control" name="company-id" placeholder="Company ID" aria-label="Server">
+                      <span class="input-group-text">:</span>
+                      <input type="number" class="form-control" name="quantity" placeholder="Quantity" aria-label="Server">
+                    </div>
+
+                    <div class="col-12">
+                        <input type="submit" value="REQUEST" name="buy-drug" class="btn btn-primary">
+                    </div>
+              </form>
+        </div>
+
+        <?php
         
-          $result = $con->query($users_query);
-      ?>
-      <table border="1" cellspacing="0" cellpadding="10">
-        <tr>
-          <th>Prescription ID</th>
-          <th>Drug Name </th>
-          <th>Drug ID</th>
-          <th>Quantity Wanted</th>
-          <th>Quantitiy Remainging </th>
-          <th>Price Per Unit</th>
-          <th>Total </th>
-        </tr>
-      <?php
-        if ($result->num_rows > 0) {
-            $sn=1;
-            while($data = $result->fetch_assoc()) {
+            if(isset($_POST["search-drug"])){
+      
+            $drug_name_search = $_POST["drug-name-search"];
+
+            $business_id = $user_data["business_id"];
+             
+            if($drug_name_search != ""){
+              $query = "SELECT * FROM contracts JOIN company_drugs ON contracts.company_id = company_drugs.businesss_id WHERE pharmacy_id = '$business_id' AND drug_name = '$drug_name_search' ";
+
+            }else {
+              $query = "SELECT * FROM contracts JOIN company_drugs ON contracts.company_id = company_drugs.businesss_id WHERE pharmacy_id = '$business_id'";
+
+            }
+
+            //echo $business_id;
+
+            $result = $con->query($query);
+
+            if ($result->num_rows > 0) {
+                $sn=1;
+                while($data = $result->fetch_assoc()) {
         ?>
-      <tr>
-        <td><?php echo $data["Prescription_ID"]; ?> </td>
-        <td><?php echo $data["drug_name"]; ?> </td>
-        <td><?php echo $data["drug_id"]; ?> </td>
-        <td><?php echo $data['prescription_quantity']; ?> </td>
-        <td><?php echo $data['quantity']; ?> </td>
-        <td><?php echo $data['price_per_unit']; ?> </td>
-        <td><?php echo (int)$data['prescription_quantity']*(int)$data['price_per_unit'] ?> </td>
-       
-      <tr>
-      <?php
+
+         <div class="card">
+            <div class="card-body">
+              <h5 class="card-title"> Drug Name : <?php echo $data["drug_name"]?></h5>
+              <h5 class="card-title"> Drug ID : <?php echo $data["drug_id"]?></h5>
+              <h5 class="card-title"> Drug Formula : <?php echo $data["drug_formula"]?></h5>
+              <h5 class="card-title"> Quantity Remaining : <?php echo $data["quantity"]?></h5>
+              <h5 class="card-title"> Price Per Unit : <?php echo $data["price_per_unit"]?></h5>
+              <h6 class="card-subtitle mb-2 text-muted"> Company ID : <?php echo $data["company_id"] ?> </h6>
+
+            </div>
+          </div>
+
+        <?php
         $sn++;}} else { ?>
-          <tr>
-          <td colspan="8">No data found</td>
-          </tr>
-
-      <?php } ?>
+            <p> No Such Drug </p>
+      <?php } }?>
 
       <?php
-        print_r($data);
+        //print_r($data);
+
+        $crud = new CRUD("localhost","root","123pass","drugdispensary");
+
+        if(isset($_POST["buy-drug"])) {
+            $drug_id = $_POST["drug-id"];
+            $company_id = $_POST["company-id"];
+            $quantity = $_POST["quantity"];
+
+            $quantity_query = "SELECT * FROM company_drugs WHERE drug_id = '$drug_id' AND businesss_id = '$company_id' LIMIT 1";
+            
+            $quantity_data = $con->query($quantity_query)->fetch_assoc();
+
+            if($quantity > $quantity_data["quantity"]){
+                echo "Reduce The Quantity Wanted ";
+            }else {
+
+                $company_quantity = (int)$quantity_data["quantity"]-(int)$quantity;
+
+                $update_query = "UPDATE company_drugs SET quantity = '$company_quantity' WHERE drug_id = '$drug_id' ";
+
+                $updated_drug_data = array(
+                  'drug_id' => $drug_id,
+                  'businesss_id' => $user_data['business_id'],
+                  'drug_formula' => $quantity_data["drug_formula"],
+                  'drug_name' => $quantity_data["drug_name"],
+                  'quantity' => $quantity,
+                  'price_per_unit' =>  $quantity_data["price_per_unit"] 
+                );
+
+                if($con->query($update_query)){
+                    if ($crud->create('pharmacy_drugs',$updated_drug_data)) {
+                        header("Location: /pharmacy-view-drugs.php ");   
+                    }else {
+                        $msg = "couldn't add drug";
+                    }
+                }else{
+                    $msg = "failed";
+                }
+            }
+
+        }
+        echo $msg;
        ?>
-        </table>
+
+
+
+
     </section>
 
   </main><!-- End #main -->
 
   <!-- ======= Footer ======= -->
-  <footer id="footer" class="footer">
+  <footer id="footer" class="footer"><
   
   </footer><!-- End Footer -->
 

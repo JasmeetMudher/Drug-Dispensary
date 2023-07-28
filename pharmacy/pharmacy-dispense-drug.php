@@ -194,8 +194,8 @@
         </a>
       </li>
       <li>
-        <a href="tables-data.html">
-          <i class="bi bi-circle"></i><span>Data Tables</span>
+        <a href="/pharmacy-view-dispensed.php">
+          <i class="bi bi-circle"></i><span>Dispensed Drugs</span>
         </a>
       </li>
     </ul>

@@ -1,18 +1,18 @@
 <?php
 
-  include("connection.php");
-  include("business-functions.php");
+include("connection.php");
+include("functions.php");
+include("crud.php");
 
-  session_start();
+session_start();
 
-  $username = $_SESSION['Name'];
-  $usertype = $_SESSION['usertype'];
-  if($_SESSION['usertype'] === 'pharmaceutical_company'){
-    $usertype = "Pharmaceutical";
-  }
- 
-  $user_data = check_login($con);
+$username = $_SESSION['Name'];
+$usertype = $_SESSION['usertype'];
+if ($_SESSION['usertype'] === 'pharmaceutical_company') {
+  $usertype = "Pharmaceutical";
+}
 
+$user_data = check_login($con);
 
 ?>
 
@@ -22,9 +22,9 @@
 
 <head>
   <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewpo  rt">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Pharmacy Dashboard</title>
+  <title>Doctor Search</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -73,7 +73,7 @@
     <div class="search-bar">
       <form class="search-form d-flex align-items-center" method="POST" action="#">
         <input type="text" name="query" placeholder="Search" title="Enter search keyword">
-        <button type="submit" title="Search"><i class="bi bi-search"></i></button>
+        <button type="submit" name="patient-search" title="Search"><i class="bi bi-search"></i></button>
       </form>
     </div><!-- End Search Bar -->
 
@@ -141,7 +141,7 @@
               </a>
             </li>
 
-          </ul><!-- End Profile Dropdown Items -->            
+          </ul><!-- End Profile Dropdown Items -->
         </li><!-- End Profile Nav -->
 
       </ul>
@@ -159,69 +159,27 @@
           <i class="bi bi-grid"></i>
           <span>Dashboard</span>
         </a>
-
       </li><!-- End Dashboard Nav -->
 
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-menu-button-wide"></i><span>Patients</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a href="/doctor-search-patients.php">
+              <i class="bi bi-circle"></i><span>Search Patients</span>
+            </a>
+          </li>
+        </ul>
+      </li><!-- End Components Nav -->
 
-      <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-journal-text"></i><span>Drugs</span><i class="bi bi-chevron-down ms-auto"></i>
-        </a>
-        <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-          <li>
-            <a class="nav-link " href="/pharmacy-buy-drugs.php">
-                <i class="bi bi-grid"></i>
-                <span>Buy Drugs</span>
-            </a>
-          </li>
-          <li>
-          <a class="nav-link " href="/pharmacy-view-drugs.php">
-                <i class="bi bi-grid"></i>
-                <span>View Drugs</span>
-            </a>
-          </li>
-        </ul>
-      </li><!-- End Forms Nav -->
 
-      <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-layout-text-window-reverse"></i><span>Orders</span><i class="bi bi-chevron-down ms-auto"></i>
-        </a>
-        <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-          <li>
-            <a href="/pharmacy-dispense-drug.php">
-              <i class="bi bi-circle"></i><span>Dispense Drugs</span>
-            </a>
-          </li>
-          <li>
-            <a href="tables-data.html">
-              <i class="bi bi-circle"></i><span>Data Tables</span>
-            </a>
-          </li>
-        </ul>
-      </li><!-- End Tables Nav -->
-      <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#icons-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-gem"></i><span>Contracts</span><i class="bi bi-chevron-down ms-auto"></i>
-        </a>
-        <ul id="icons-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-          <li>
-            <a href="/pharmacy-view-contracts.php">
-              <i class="bi bi-circle"></i><span>View Contracts </span>
-            </a>
-          </li>
-          <li>
-            <a href="/pharmacy-get-contract.php">
-              <i class="bi bi-circle"></i><span>Get Contract</span>
-            </a>
-          </li>
-        </ul>
-      </li><!-- End Icons Nav -->
 
       <li class="nav-heading">Pages</li>
 
       <li class="nav-item">
-        <a class="nav-link collapsed" href="/business-profile.php">
+        <a class="nav-link collapsed" href="userprofile.php">
           <i class="bi bi-person"></i>
           <span>Profile</span>
         </a>
@@ -242,73 +200,115 @@
   <main id="main" class="main">
 
     <div class="pagetitle">
-      <h1>Dashboard</h1>
+      <h1>Give Prescription</h1>
       <nav>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-          <li class="breadcrumb-item active">Dashboard</li>
+          <li class="breadcrumb-item"><a href="/doctor-dashboard.php">Doctor</a></li>
+          <li class="breadcrumb-item active">Give Prescription</li>
         </ol>
       </nav>
     </div><!-- End Page Title -->
 
     <section class="section dashboard">
-      <?php  
 
-        if($_SESSION['user-level']){
-          $table_name = $_SESSION['usertype'];
-        }else {
-          $table_name = $usertype."s";
+
+      <div class="card-body">
+        <form class="row g-3 needs-validation" method="post">
+
+          <div class="input-group mb-3">
+            <input type="text" class="form-control" name="patient_SSN" placeholder="Patient SSN" aria-label="Patient SSN">
+            <input type="text" class="form-control" name="drug-id" placeholder="Drug ID" aria-label="Drug ID">
+            <span class="input-group-text">:</span>
+            <input type="text" class="form-control" name="quantity" placeholder="Quantity" aria-label="Quantity">
+            <span class="input-group-text">:</span>
+            <input type="number" class="form-control" name="frequency" placeholder="Frequency" aria-label="Frequency">
+          </div>
+
+          <div class="col-12">
+            <input type="submit" value="REQUEST" name="buy-drug" class="btn btn-primary">
+          </div>
+        </form>
+      </div>
+
+      <?php
+
+      if (isset($_POST["patient-search"])) {
+
+        
+        $drug_name_search = $_POST["query"];
+
+        $doctor_SSN = $user_data["SSN"];
+
+        if ($drug_name_search == "") {
+          $query = "SELECT * FROM patient_doctor_tbl JOIN patients ON patient_doctor_tbl.patient_SSN = patients.SSN WHERE doctor_SSN = '$doctor_SSN'";
+        } else {
+          $query = "SELECT * FROM patient_doctor_tbl JOIN patients ON patient_doctor_tbl.patient_SSN = patients.SSN WHERE doctor_SSN = '$doctor_SSN' AND patient_SSN = '$drug_name_search'";
         }
 
-          $business_id = $user_data["business_id"];
-          $users_query = "SELECT * FROM precriptions JOIN pharmacy_drugs ON precriptions.drug_id = pharmacy_drugs.drug_id WHERE businesss_id = '$business_id'";
-        
-          $result = $con->query($users_query);
-      ?>
-      <table border="1" cellspacing="0" cellpadding="10">
-        <tr>
-          <th>Prescription ID</th>
-          <th>Drug Name </th>
-          <th>Drug ID</th>
-          <th>Quantity Wanted</th>
-          <th>Quantitiy Remainging </th>
-          <th>Price Per Unit</th>
-          <th>Total </th>
-        </tr>
-      <?php
+        //echo $business_id;
+
+        $result = $con->query($query);
+
         if ($result->num_rows > 0) {
-            $sn=1;
-            while($data = $result->fetch_assoc()) {
-        ?>
-      <tr>
-        <td><?php echo $data["Prescription_ID"]; ?> </td>
-        <td><?php echo $data["drug_name"]; ?> </td>
-        <td><?php echo $data["drug_id"]; ?> </td>
-        <td><?php echo $data['prescription_quantity']; ?> </td>
-        <td><?php echo $data['quantity']; ?> </td>
-        <td><?php echo $data['price_per_unit']; ?> </td>
-        <td><?php echo (int)$data['prescription_quantity']*(int)$data['price_per_unit'] ?> </td>
-       
-      <tr>
-      <?php
-        $sn++;}} else { ?>
-          <tr>
-          <td colspan="8">No data found</td>
-          </tr>
+          $sn = 1;
+          while ($data = $result->fetch_assoc()) {
+      ?>
 
-      <?php } ?>
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title"> Patient Name : <?php echo $data["Fname"] . " " . $data["Lname"] ?></h5>
+                <h5 class="card-title"> Patient SSN : <?php echo $data["SSN"] ?></h5>
+                <h5 class="card-title"> Patient Email : <?php echo $data["email"] ?></h5>
+                <h5 class="card-title"> Address : <?php echo $data["address"] ?></h5>
+              </div>
+            </div>
+
+          <?php
+            $sn++;
+          }
+        } else { ?>
+          <p> No such Patient Allocated to you </p>
+      <?php }
+      } ?>
 
       <?php
-        print_r($data);
-       ?>
-        </table>
+      //print_r($data);
+
+      $crud = new CRUD("localhost", "root", "123pass", "drugdispensary");
+
+      if (isset($_POST["buy-drug"])) {
+        $drug_id = $_POST["drug-id"];
+        $company_id = $_POST["company-id"];
+        $quantity = $_POST["quantity"];
+
+
+        $prescription_data = array(
+          'patient_SSN' => $_POST['patient_SSN'],
+          'doctor_SSN' => $user_data['SSN'],
+          'drug_id' => $drug_id,
+          'prescription_quantity' => $_POST["quantity"],
+          'frequency' => $_POST["frequency"],
+        );
+
+        if ($crud->create('precriptions', $prescription_data)) {
+          $mdg = "drug prescribed";
+        } else {
+          $msg = "prescribe drug";
+        }
+      }
+      echo $msg;
+      ?>
+
+
+
+
     </section>
 
   </main><!-- End #main -->
 
   <!-- ======= Footer ======= -->
   <footer id="footer" class="footer">
-  
+
   </footer><!-- End Footer -->
 
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>

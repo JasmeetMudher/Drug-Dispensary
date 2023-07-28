@@ -2,6 +2,7 @@
 
   include("connection.php");
   include("business-functions.php");
+  include("crud.php");
 
   session_start();
 
@@ -13,6 +14,23 @@
  
   $user_data = check_login($con);
 
+  if(isset($_POST["request-contract"])){
+
+    $contract_data = array(
+        'pharmacy_id' => $user_data["business_id"],
+        'company_id' => $_POST["company_id"],
+        'contract_start' => date('y-m-d',strtotime($_POST["contract_start"])),
+        'contract_end' => date('y-m-d',strtotime($_POST["contract_end"])),
+    ); 
+
+    $crud = new CRUD("localhost","root","123pass","drugdispensary");
+    if($crud->create('contracts',$contract_data)){
+        header("Location: /pharmacy-view-contracts.php");
+    }else{
+        echo "error";
+    }
+
+  }
 
 ?>
 
@@ -22,9 +40,9 @@
 
 <head>
   <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewpo  rt">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Pharmacy Dashboard</title>
+  <title>View Drugs</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -59,8 +77,7 @@
 
 <body>
 
-  <!-- ======= Header ======= -->
-  <header id="header" class="header fixed-top d-flex align-items-center">
+<header id="header" class="header fixed-top d-flex align-items-center">
 
     <div class="d-flex align-items-center justify-content-between">
       <a href="index.html" class="logo d-flex align-items-center">
@@ -227,14 +244,6 @@
         </a>
       </li><!-- End Profile Page Nav -->
 
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="index.html">
-          <i class="bi bi-person"></i>
-          <span>Home Page</span>
-        </a>
-      </li><!-- End Profile Page Nav -->
-
-
     </ul>
 
   </aside><!-- End Sidebar-->
@@ -242,72 +251,57 @@
   <main id="main" class="main">
 
     <div class="pagetitle">
-      <h1>Dashboard</h1>
+      <h1>View Contracts</h1>
       <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-          <li class="breadcrumb-item active">Dashboard</li>
+          <li class="breadcrumb-item active">View Contracts</li>
         </ol>
       </nav>
     </div><!-- End Page Title -->
 
     <section class="section dashboard">
-      <?php  
 
-        if($_SESSION['user-level']){
-          $table_name = $_SESSION['usertype'];
-        }else {
-          $table_name = $usertype."s";
-        }
-
-          $business_id = $user_data["business_id"];
-          $users_query = "SELECT * FROM precriptions JOIN pharmacy_drugs ON precriptions.drug_id = pharmacy_drugs.drug_id WHERE businesss_id = '$business_id'";
+        <?php
         
-          $result = $con->query($users_query);
-      ?>
-      <table border="1" cellspacing="0" cellpadding="10">
-        <tr>
-          <th>Prescription ID</th>
-          <th>Drug Name </th>
-          <th>Drug ID</th>
-          <th>Quantity Wanted</th>
-          <th>Quantitiy Remainging </th>
-          <th>Price Per Unit</th>
-          <th>Total </th>
-        </tr>
-      <?php
-        if ($result->num_rows > 0) {
-            $sn=1;
-            while($data = $result->fetch_assoc()) {
-        ?>
-      <tr>
-        <td><?php echo $data["Prescription_ID"]; ?> </td>
-        <td><?php echo $data["drug_name"]; ?> </td>
-        <td><?php echo $data["drug_id"]; ?> </td>
-        <td><?php echo $data['prescription_quantity']; ?> </td>
-        <td><?php echo $data['quantity']; ?> </td>
-        <td><?php echo $data['price_per_unit']; ?> </td>
-        <td><?php echo (int)$data['prescription_quantity']*(int)$data['price_per_unit'] ?> </td>
-       
-      <tr>
-      <?php
-        $sn++;}} else { ?>
-          <tr>
-          <td colspan="8">No data found</td>
-          </tr>
+            $business_id = $user_data["business_id"];
+            //echo $business_id;
+            $query = "SELECT * FROM contracts JOIN pharmacy_drugs ON contracts.company_id = pharmacy_drugs.businesss_id WHERE pharmacy_id = '$business_id'";
+            $result = $con->query($query);
 
+            if ($result->num_rows > 0) {
+                $sn=1;
+                while($data = $result->fetch_assoc()) {
+        ?>
+
+         <div class="card">
+            <div class="card-body">
+              <h5 class="card-title"> DRUG ID <?php echo $data["drug_id"]?></h5>
+              <h6 class="card-subtitle mb-2 text-muted"> DRUG NAME <?php echo $data["drug_name"] ?> </h6>
+              <p class="card-text"> QUANTITY <?php echo $data["quantity"] ?></p>
+              <p class="card-text"> PRICE PER UNIT <?php echo $data["price_per_unit"] ?></p>
+
+            </div>
+          </div>
+
+        <?php
+        $sn++;}} else { ?>
+            <p> No Companies Available </p>
       <?php } ?>
 
       <?php
-        print_r($data);
+        //print_r($data);
        ?>
-        </table>
+
+
+
+
     </section>
 
   </main><!-- End #main -->
 
   <!-- ======= Footer ======= -->
-  <footer id="footer" class="footer">
+  <footer id="footer" class="footer"><
   
   </footer><!-- End Footer -->
 
@@ -328,4 +322,4 @@
 
 </body>
 
-</html>
+</html> 

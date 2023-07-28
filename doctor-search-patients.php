@@ -73,7 +73,7 @@ $user_data = check_login($con);
     <div class="search-bar">
       <form class="search-form d-flex align-items-center" method="POST" action="#">
         <input type="text" name="query" placeholder="Search" title="Enter search keyword">
-        <button type="submit" name="patient-search" title="Search"><i class="bi bi-search"></i></button>
+        <button type="submit" title="Search"><i class="bi bi-search"></i></button>
       </form>
     </div><!-- End Search Bar -->
 
@@ -232,14 +232,13 @@ $user_data = check_login($con);
 
       <?php
 
-      if (isset($_POST["patient-search"])) {
+      if (isset($_POST["search-drug"])) {
 
-        
-        $drug_name_search = $_POST["query"];
+        $drug_name_search = $_POST["drug-name-search"];
 
         $doctor_SSN = $user_data["SSN"];
 
-        if ($drug_name_search == "") {
+        if ($drug_name_search != "") {
           $query = "SELECT * FROM patient_doctor_tbl JOIN patients ON patient_doctor_tbl.patient_SSN = patients.SSN WHERE doctor_SSN = '$doctor_SSN'";
         } else {
           $query = "SELECT * FROM patient_doctor_tbl JOIN patients ON patient_doctor_tbl.patient_SSN = patients.SSN WHERE doctor_SSN = '$doctor_SSN' AND patient_SSN = '$drug_name_search'";
@@ -286,7 +285,7 @@ $user_data = check_login($con);
           'patient_SSN' => $_POST['patient_SSN'],
           'doctor_SSN' => $user_data['SSN'],
           'drug_id' => $drug_id,
-          'prescription_quantity' => $_POST["quantity"],
+          'quantity' => $_POST["quantity"],
           'frequency' => $_POST["frequency"],
         );
 

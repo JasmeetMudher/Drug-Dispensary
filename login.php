@@ -152,9 +152,6 @@
                         <div class="col-12">
                           <p class="small mb-0">Are you a business ? <a href="business-login.php">Login here </a></p>
                         </div>
-                        <div class="col-12">
-                          <p class="small mb-0">An Admin ? <a href="admin-login.php">Login here </a></p>
-                        </div>
                     </form> 
 
                 </div>

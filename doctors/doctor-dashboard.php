@@ -1,17 +1,15 @@
 <?php
 
-  include("connection.php");
-  include("business-functions.php");
+include("connection.php");
+include("functions.php");
 
-  session_start();
+session_start();
 
-  $username = $_SESSION['Name'];
-  $usertype = $_SESSION['usertype'];
-  if($_SESSION['usertype'] === 'pharmaceutical_company'){
-    $usertype = "Pharmaceutical";
-  }
- 
-  $user_data = check_login($con);
+$username = $_SESSION['Name'];
+
+$usertype = $_SESSION['usertype'];
+
+$user_data = check_login($con);
 
 
 ?>
@@ -22,9 +20,9 @@
 
 <head>
   <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewpo  rt">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Pharmacy Dashboard</title>
+  <title>Dashboard - NiceAdmin Bootstrap Template</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -141,7 +139,7 @@
               </a>
             </li>
 
-          </ul><!-- End Profile Dropdown Items -->            
+          </ul><!-- End Profile Dropdown Items -->
         </li><!-- End Profile Nav -->
 
       </ul>
@@ -159,69 +157,27 @@
           <i class="bi bi-grid"></i>
           <span>Dashboard</span>
         </a>
-
       </li><!-- End Dashboard Nav -->
 
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-menu-button-wide"></i><span>Patients</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a href="/doctor-search-patients.php">
+              <i class="bi bi-circle"></i><span>Search Patients</span>
+            </a>
+          </li>
+        </ul>
+      </li><!-- End Components Nav -->
 
-      <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-journal-text"></i><span>Drugs</span><i class="bi bi-chevron-down ms-auto"></i>
-        </a>
-        <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-          <li>
-            <a class="nav-link " href="/pharmacy-buy-drugs.php">
-                <i class="bi bi-grid"></i>
-                <span>Buy Drugs</span>
-            </a>
-          </li>
-          <li>
-          <a class="nav-link " href="/pharmacy-view-drugs.php">
-                <i class="bi bi-grid"></i>
-                <span>View Drugs</span>
-            </a>
-          </li>
-        </ul>
-      </li><!-- End Forms Nav -->
 
-      <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-layout-text-window-reverse"></i><span>Orders</span><i class="bi bi-chevron-down ms-auto"></i>
-        </a>
-        <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-          <li>
-            <a href="/pharmacy-dispense-drug.php">
-              <i class="bi bi-circle"></i><span>Dispense Drugs</span>
-            </a>
-          </li>
-          <li>
-            <a href="tables-data.html">
-              <i class="bi bi-circle"></i><span>Data Tables</span>
-            </a>
-          </li>
-        </ul>
-      </li><!-- End Tables Nav -->
-      <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#icons-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-gem"></i><span>Contracts</span><i class="bi bi-chevron-down ms-auto"></i>
-        </a>
-        <ul id="icons-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-          <li>
-            <a href="/pharmacy-view-contracts.php">
-              <i class="bi bi-circle"></i><span>View Contracts </span>
-            </a>
-          </li>
-          <li>
-            <a href="/pharmacy-get-contract.php">
-              <i class="bi bi-circle"></i><span>Get Contract</span>
-            </a>
-          </li>
-        </ul>
-      </li><!-- End Icons Nav -->
 
       <li class="nav-heading">Pages</li>
 
       <li class="nav-item">
-        <a class="nav-link collapsed" href="/business-profile.php">
+        <a class="nav-link collapsed" href="userprofile.php">
           <i class="bi bi-person"></i>
           <span>Profile</span>
         </a>
@@ -252,79 +208,69 @@
     </div><!-- End Page Title -->
 
     <section class="section dashboard">
-      <?php  
+      <?php
 
-        if($_SESSION['user-level']){
-          $table_name = $_SESSION['usertype'];
-        }else {
-          $table_name = $usertype."s";
-        }
+      $table_name = $usertype . "s";
 
-          $business_id = $user_data["business_id"];
-          $users_query = "SELECT * FROM precriptions JOIN pharmacy_drugs ON precriptions.drug_id = pharmacy_drugs.drug_id WHERE businesss_id = '$business_id'";
-        
-          $result = $con->query($users_query);
+      $users_query = "SELECT * FROM " . $table_name;
+
+      $result = $con->query($users_query);
       ?>
       <table border="1" cellspacing="0" cellpadding="10">
         <tr>
-          <th>Prescription ID</th>
-          <th>Drug Name </th>
-          <th>Drug ID</th>
-          <th>Quantity Wanted</th>
-          <th>Quantitiy Remainging </th>
-          <th>Price Per Unit</th>
-          <th>Total </th>
+          <th>SSN</th>
+          <th>Full Name</th>
+          <th>Phone</th>
+          <th>Dob</th>
+          <th>Email</th>
+          <th>address</th>
         </tr>
-      <?php
+        <?php
         if ($result->num_rows > 0) {
-            $sn=1;
-            while($data = $result->fetch_assoc()) {
+          $sn = 1;
+          while ($data = $result->fetch_assoc()) {
         ?>
-      <tr>
-        <td><?php echo $data["Prescription_ID"]; ?> </td>
-        <td><?php echo $data["drug_name"]; ?> </td>
-        <td><?php echo $data["drug_id"]; ?> </td>
-        <td><?php echo $data['prescription_quantity']; ?> </td>
-        <td><?php echo $data['quantity']; ?> </td>
-        <td><?php echo $data['price_per_unit']; ?> </td>
-        <td><?php echo (int)$data['prescription_quantity']*(int)$data['price_per_unit'] ?> </td>
-       
-      <tr>
-      <?php
-        $sn++;}} else { ?>
-          <tr>
-          <td colspan="8">No data found</td>
-          </tr>
+            <tr>
+              <td><?php echo $data["SSN"]; ?> </td>
+              <td><?php echo $data['Fname'] . " " . $data['Lname']; ?> </td>
+              <td><?php echo $data['phone']; ?> </td>
+              <td><?php echo $data['dob']; ?> </td>
+              <td><?php echo $data['email']; ?> </td>
+              <td><?php echo $data['address']; ?> </td>
 
-      <?php } ?>
+            <tr>
+            <?php
+            $sn++;
+          }
+        } else { ?>
+            <tr>
+              <td colspan="8">No data found</td>
+            </tr>
 
-      <?php
-        print_r($data);
-       ?>
-        </table>
+          <?php } ?>
+      </table>
     </section>
 
   </main><!-- End #main -->
 
   <!-- ======= Footer ======= -->
   <footer id="footer" class="footer">
-  
-  </footer><!-- End Footer -->
+    < </footer><!-- End Footer -->
 
-  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+      <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
-  <!-- Vendor JS Files -->
-  <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
-  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="assets/vendor/chart.js/chart.min.js"></script>
-  <script src="assets/vendor/echarts/echarts.min.js"></script>
-  <script src="assets/vendor/quill/quill.min.js"></script>
-  <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
-  <script src="assets/vendor/tinymce/tinymce.min.js"></script>
-  <script src="assets/vendor/php-email-form/validate.js"></script>
+      <!-- Vendor JS Files -->
+      <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
+      <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+      <script src="assets/vendor/chart.js/chart.min.js"></script>
+      <script src="assets/vendor/echarts/echarts.min.js"></script>
+      <script src="assets/vendor/quill/quill.min.js"></script>
+      <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
+      <script src="assets/vendor/tinymce/tinymce.min.js"></script>
+      <script src="assets/vendor/php-email-form/validate.js"></script>
 
-  <!-- Template Main JS File -->
-  <script src="assets/js/main.js"></script>
+      <!-- Template Main JS File -->
+      <script src="assets/js/main.js"></script>
 
 </body>
 
