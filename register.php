@@ -7,7 +7,16 @@ include 'crud.php';
 $msg = '';
 $suc = '';
 
-
+function alert_box(){
+  echo '<script>
+  
+        var w = window.open("", "", "width=300,height=2px")
+        w.document.write("User Has Been Registered !")
+        w.focus()
+        setTimeout(function () { w.close(); }, 3000); 
+  
+       </script>';
+}
 
 if(isset($_POST["btnsubmit"])){
 
@@ -24,18 +33,22 @@ if(isset($_POST["btnsubmit"])){
 
     );
 
-    $crud = new CRUD("localhost","root","123pass","drugdispensary");
+    $crud = new CRUD("localhost","stonie","123pass","drugdispensary");
 
     $user_type = $_POST["user-type"];
 
     if($crud->create($user_type , $patient_data)){
+        echo '<script>alert("User Registered")</script>';
         $_SESSION['usertype'] = $user_type;
         $msg = "<div class='btn btn-success'>records inserted successfully</div>";
-        if($user_type == 'admins'){
+        if(alert_box()){
+                  if($user_type == 'admins'){
           header("location: admin-dashboard.php");
         }else {
           header("location: dashboard.php");
         }
+        }
+
 
     }else{
         die("Error in creating patient");
