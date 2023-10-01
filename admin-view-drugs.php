@@ -153,7 +153,7 @@ $user_data = check_login($con);
         <ul class="sidebar-nav" id="sidebar-nav">
 
             <li class="nav-item">
-                <a class="nav-link " href="/admin-dashboard.php">
+            <a class="nav-link " href="/admin-dashboard.php">
                     <i class="bi bi-grid"></i>
                     <span>Dashboard</span>
                 </a>
@@ -242,18 +242,18 @@ $user_data = check_login($con);
     <main id="main" class="main">
 
         <div class="pagetitle">
-            <h1>Dashboard</h1>
+            <h1>View Drugs</h1>
             <nav>
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-                    <li class="breadcrumb-item active">Dashboard</li>
+                    <li class="breadcrumb-item"><a href="index.html">Admin</a></li>
+                    <li class="breadcrumb-item active">View Drugs</li>
                 </ol>
             </nav>
         </div><!-- End Page Title -->
 
         <section class="section dashboard">
 
-            <h5> Patients </h5>
+            <h5> Drugs in Stock </h5>
 
             <?php
 
@@ -264,182 +264,29 @@ $user_data = check_login($con);
             }
 
             $business_id = $user_data["SSN"];
-            $users_query = "SELECT * FROM patients";
+            $users_query = "SELECT * FROM drugs";
 
             $result = $con->query($users_query);
             ?>
             <table border="1" cellspacing="0" cellpadding="10">
                 <tr>
-                    <th>SSN</th>
-                    <th>Name </th>
-                    <th>Phone</th>
-                    <th>Email </th>
-                    <th>Address </th>
+                    <th>Drug ID</th>
+                    <th>Drug Name </th>
+                    <th>Drug Formula</th>
+                    <th> Quantity </th>
+                    <th>Image </th>
                 </tr>
-                <?php
+                <?php   
                 if ($result->num_rows > 0) {
                     $sn = 1;
                     while ($data = $result->fetch_assoc()) {
                 ?>
                         <tr>
-                            <td><?php echo $data["SSN"]; ?> </td>
-                            <td><?php echo $data["Fname"]." ".$data["Lname"]; ?> </td>
-                            <td><?php echo $data["dob"]; ?> </td>
-                            <td><?php echo $data['email']; ?> </td>
-                            <td><?php echo $data['address']; ?> </td>
-                        <tr>
-                        <?php
-                        $sn++;
-                    }
-                } else { ?>
-                        <tr>
-                            <td colspan="8">No data found</td>
-                        </tr>
-
-                    <?php } ?>
-
-                    <?php
-                    print_r($data);
-                    ?>
-            </table>
-
-
-            
-            <h5> Doctors </h5>
-
-            <?php
-
-            if ($_SESSION['user-level']) {
-                $table_name = $_SESSION['usertype'];
-            } else {
-                $table_name = $usertype . "s";
-            }
-
-            $business_id = $user_data["SSN"];
-            $users_query = "SELECT * FROM doctors";
-
-            $result = $con->query($users_query);
-            ?>
-            <table border="1" cellspacing="0" cellpadding="10">
-                <tr>
-                    <th>SSN</th>
-                    <th>Name </th>
-                    <th>Phone</th>
-                    <th>Email </th>
-                    <th>Address </th>
-                </tr>
-                <?php
-                if ($result->num_rows > 0) {
-                    $sn = 1;
-                    while ($data = $result->fetch_assoc()) {
-                ?>
-                        <tr>
-                            <td><?php echo $data["SSN"]; ?> </td>
-                            <td><?php echo $data["Fname"]." ".$data["Lname"]; ?> </td>
-                            <td><?php echo $data["dob"]; ?> </td>
-                            <td><?php echo $data['email']; ?> </td>
-                            <td><?php echo $data['address']; ?> </td>
-                        <tr>
-                        <?php
-                        $sn++;
-                    }
-                } else { ?>
-                        <tr>
-                            <td colspan="8">No data found</td>
-                        </tr>
-
-                    <?php } ?>
-
-                    <?php
-                    print_r($data);
-                    ?>
-            </table>
-
-
-            <h5> Pharmacies </h5>
-
-            <?php
-
-            if ($_SESSION['user-level']) {
-                $table_name = $_SESSION['usertype'];
-            } else {
-                $table_name = $usertype . "s";
-            }
-
-            $business_id = $user_data["SSN"];
-            $users_query = "SELECT * FROM pharmacy";
-
-            $result = $con->query($users_query);
-            ?>
-            <table border="1" cellspacing="0" cellpadding="10">
-                <tr>
-                    <th>Business ID</th>
-                    <th>Name </th>
-                    <th>Phone</th>
-                    <th>Email </th>
-                    <th>Address </th>
-                </tr>
-                <?php
-                if ($result->num_rows > 0) {
-                    $sn = 1;
-                    while ($data = $result->fetch_assoc()) {
-                ?>
-                        <tr>
-                            <td><?php echo $data["business_id"]; ?> </td>
-                            <td><?php echo $data["name"]; ?> </td>
-                            <td><?php echo $data["phone"]; ?> </td>
-                            <td><?php echo $data['email']; ?> </td>
-                            <td><?php echo $data['address']; ?> </td>
-                        <tr>
-                        <?php
-                        $sn++;
-                    }
-                } else { ?>
-                        <tr>
-                            <td colspan="8">No data found</td>
-                        </tr>
-
-                    <?php } ?>
-
-                    <?php
-                    print_r($data);
-                    ?>
-            </table>
-
-            <h5> Pharmaceutical Companys </h5>
-
-            <?php
-
-            if ($_SESSION['user-level']) {
-                $table_name = $_SESSION['usertype'];
-            } else {
-                $table_name = $usertype . "s";
-            }
-
-            $business_id = $user_data["SSN"];
-            $users_query = "SELECT * FROM pharmaceutical_company";
-
-            $result = $con->query($users_query);
-            ?>
-            <table border="1" cellspacing="0" cellpadding="10">
-                <tr>
-                    <th>Business ID</th>
-                    <th>Name </th>
-                    <th>Phone</th>
-                    <th>Email </th>
-                    <th>Address </th>
-                </tr>
-                <?php
-                if ($result->num_rows > 0) {
-                    $sn = 1;
-                    while ($data = $result->fetch_assoc()) {
-                ?>
-                        <tr>
-                            <td><?php echo $data["business_id"]; ?> </td>
-                            <td><?php echo $data["name"]; ?> </td>
-                            <td><?php echo $data["phone"]; ?> </td>
-                            <td><?php echo $data['email']; ?> </td>
-                            <td><?php echo $data['address']; ?> </td>
+                            <td><?php echo $data["drug_id"]; ?> </td>
+                            <td><?php echo $data["drug_name"] ?> </td>
+                            <td><?php echo $data["drug_formula"]; ?> </td>
+                            <td><?php echo $data['quantity']; ?> </td>
+                            <td> <img src="./image/<?php echo $data['filename']; ?>" width="100", height="100"> </td>
                         <tr>
                         <?php
                         $sn++;
